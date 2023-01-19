@@ -24,6 +24,7 @@ setup(name="cdindex",
                              "src/utility.c", 
                              "cdindex/pycdindex.c"],
                              include_dirs = ["src"],
+                             headers = ["src/cdindex.h"],
                            )
                 ],
     packages=find_packages()
