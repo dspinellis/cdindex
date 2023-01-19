@@ -1,18 +1,14 @@
-CC=gcc
-CFLAGS=
-LDFLAGS=
 SOURCES=src/main.c src/cdindex.c src/graph.c src/utility.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=bin/cdindex
 
-all: $(SOURCES) $(EXECUTABLE)
-    
-$(EXECUTABLE): $(OBJECTS) 
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
 	mkdir -p bin
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-c.o:
-	$(CC) $(CFLAGS) $< -o $@
-	
+.PHONY: clean
+
 clean:
-	rm src/*o
+	rm -f src/*.o $(EXECUTABLE)
