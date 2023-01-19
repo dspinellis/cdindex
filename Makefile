@@ -8,6 +8,7 @@ EXECUTABLE=bin/cdindex
 all: $(SOURCES) $(EXECUTABLE)
     
 $(EXECUTABLE): $(OBJECTS) 
+	mkdir -p bin
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 c.o:
