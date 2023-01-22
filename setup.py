@@ -27,7 +27,8 @@ setup(name="cdindex",
                              headers = ["src/cdindex.h"],
                            )
                 ],
-    packages=find_packages()
+    packages=find_packages(),
+    include_files=['src/cdindex.h']
 )
 
 # python setup.py build_ext --inplace
