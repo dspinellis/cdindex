@@ -37,12 +37,6 @@ typedef struct Vertex {
  * These allow treating Vertex as an opaque data type
  */
 long long int
-get_vertex_id(Graph *g, long long int id)
-{
-	return g->vs[id].id;
-}
-
-long long int
 get_vertex_in_degree(Graph *g, long long int id)
 {
 	return g->vs[id].in_degree;
@@ -64,12 +58,6 @@ long long int
 get_vertex_out_edge(Graph *g, long long int vertex_id, long long int edge_id)
 {
 	return g->vs[vertex_id].out_edges[edge_id];
-}
-
-long long int *
-get_vertex_in_edges(Graph *g, long long int id)
-{
-	return g->vs[id].in_edges;
 }
 
 long long int get_vertex_in_edge(Graph *g, long long int vertex_id, long long int edge_id)

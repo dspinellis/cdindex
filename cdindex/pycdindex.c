@@ -135,7 +135,7 @@ static PyObject *py_get_vertices(PyObject *self, PyObject *args) {
   PyObject *vs_list = PyList_New(g->vcount);
 
   for (long long int i = 0; i < g->vcount; i++) {
-    id = Py_BuildValue("L", get_vertex_id(g, i));
+    id = Py_BuildValue("L", i);
     PyList_SetItem(vs_list, i, id);
   }
 

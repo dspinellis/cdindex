@@ -27,13 +27,11 @@ void add_vertex(Graph *graph, long long int id, long long int timestamp);
 void add_edge(Graph *graph, long long int source_id, long long int target_id);
 void free_graph(Graph *graph);
 
-long long int get_vertex_id(Graph *g, long long int id);
 long long int get_vertex_in_degree(Graph *g, long long int id);
 long long int get_vertex_out_degree(Graph *g, long long int id);
 long long int get_vertex_timestamp(Graph *g, long long int id);
 long long int get_vertex_out_edge(Graph *g, long long int vertex_id, long long int edge_id);
 long long int get_vertex_in_edge(Graph *g, long long int vertex_id, long long int edge_id);
-long long int * get_vertex_in_edges(Graph *g, long long int id);
 bool vertex_has_out_edge(Graph *g, long long int vertex_id, long long int edge_id);
 
 
