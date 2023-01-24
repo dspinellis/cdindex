@@ -2,6 +2,14 @@ SOURCES=src/main.c src/cdindex.c src/graph.c src/utility.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=bin/cdindex
 
+ifdef DEBUG
+	CFLAGS=-g -O0
+	CXXFLAGS=-g -O0
+else
+	CFLAGS=-O3
+	CXXFLAGS=-O3
+endif
+
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
