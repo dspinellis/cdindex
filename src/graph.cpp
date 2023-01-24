@@ -72,17 +72,16 @@ get_vertex_in_edges(Graph *g, long long int id)
 	return g->vs[id].in_edges;
 }
 
-long long int *
-get_vertex_out_edges(Graph *g, long long int id)
-{
-	return g->vs[id].out_edges;
-}
-
 long long int get_vertex_in_edge(Graph *g, long long int vertex_id, long long int edge_id)
 {
 	return g->vs[vertex_id].in_edges[edge_id];
 }
 
+bool
+vertex_has_out_edge(Graph *g, long long int vertex_id, long long int edge_id)
+{
+    return in_int_array(g->vs[vertex_id].out_edges, g->vs[vertex_id].out_degree, edge_id);
+}
 
 /**
  * \function is_graph_sane

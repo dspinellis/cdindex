@@ -74,10 +74,10 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
   /* compute the cd index */
   double sum_i = 0.0;
   for (i = 0; i < it_count; i++) {
-    long long int f_it = in_int_array(get_vertex_out_edges(graph,it[i]), get_vertex_out_degree(graph, it[i]), id);
+    long long int f_it = vertex_has_out_edge(graph,it[i], id);
     long long int b_it = 0;
     for (long long int j = 0; j < get_vertex_out_degree(graph, it[i]); j++) {
-      if (in_int_array(get_vertex_out_edges(graph, id), get_vertex_out_degree(graph, id), get_vertex_out_edge(graph, it[i], j))) {
+      if (vertex_has_out_edge(graph, id, get_vertex_out_edge(graph, it[i], j))) {
         b_it = 1;
       }
     }
