@@ -9,11 +9,6 @@ typedef struct Vertex {
   long long int out_degree;
 } Vertex;
 
-typedef struct Edge {
-	long long int source_id;
-	long long int target_id;
-} Edge;
-
 typedef struct Graph {
     long long int vcount;
     Vertex *vs;
