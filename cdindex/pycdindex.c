@@ -135,7 +135,7 @@ static PyObject *py_get_vertices(PyObject *self, PyObject *args) {
   PyObject *vs_list = PyList_New(g->vcount);
 
   for (long long int i = 0; i < g->vcount; i++) {
-    id = Py_BuildValue("L", g->vs[i].id);
+    id = Py_BuildValue("L", get_vertex_id(g, i));
     PyList_SetItem(vs_list, i, id);
   }
 
@@ -177,7 +177,7 @@ static PyObject *py_get_vertex_timestamp(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", g->vs[ID].timestamp);
+  return Py_BuildValue("L", get_vertex_timestamp(g, ID));
 }
 
 /*******************************************************************************
@@ -194,7 +194,7 @@ static PyObject *py_get_vertex_in_degree(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", g->vs[ID].in_degree);
+  return Py_BuildValue("L", get_vertex_in_degree(g, ID));
 }
 
 /*******************************************************************************
@@ -211,10 +211,10 @@ static PyObject *py_get_vertex_in_edges(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  PyObject *vs_list = PyList_New(g->vs[ID].in_degree);
+  PyObject *vs_list = PyList_New(get_vertex_in_degree(g, ID));
 
-  for (long long int i = 0; i < g->vs[ID].in_degree; i++) {
-    source_id = Py_BuildValue("L", g->vs[ID].in_edges[i]);
+  for (long long int i = 0; i < get_vertex_in_degree(g, ID); i++) {
+    source_id = Py_BuildValue("L", get_vertex_in_edge(g, ID, i));
     PyList_SetItem(vs_list, i, source_id);
   }
 
@@ -240,7 +240,7 @@ static PyObject *py_get_vertex_out_degree(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", g->vs[ID].out_degree);
+  return Py_BuildValue("L", get_vertex_out_degree(g, ID));
 }
 
 /*******************************************************************************
@@ -257,10 +257,10 @@ static PyObject *py_get_vertex_out_edges(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  PyObject *vs_list = PyList_New(g->vs[ID].out_degree);
+  PyObject *vs_list = PyList_New(get_vertex_out_degree(g, ID));
 
-  for (long long int i = 0; i < g->vs[ID].out_degree; i++) {
-    target_id = Py_BuildValue("L", g->vs[ID].out_edges[i]);
+  for (long long int i = 0; i < get_vertex_out_degree(g, ID); i++) {
+    target_id = Py_BuildValue("L", get_vertex_out_edge(g, ID, i));
     PyList_SetItem(vs_list, i, target_id);
   }
 

@@ -47,12 +47,12 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
    long long int i;
 
    /* add unique "in_edges" of focal vertex "out_edges" */
-   for (i = 0; i < graph->vs[id].out_degree; i++) {
-     long long int out_edge_i = graph->vs[id].out_edges[i];
-     for (long long int j = 0; j < graph->vs[out_edge_i].in_degree; j++) {
-       long long int out_edge_i_in_edge_j = graph->vs[out_edge_i].in_edges[j];
-       if (graph->vs[out_edge_i_in_edge_j].timestamp > graph->vs[id].timestamp &&
-           graph->vs[out_edge_i_in_edge_j].timestamp <= (graph->vs[id].timestamp + time_delta) &&
+   for (i = 0; i < get_vertex_out_degree(graph, id); i++) {
+     long long int out_edge_i = get_vertex_out_edge(graph, id, i);
+     for (long long int j = 0; j < get_vertex_in_degree(graph, out_edge_i); j++) {
+       long long int out_edge_i_in_edge_j = get_vertex_in_edge(graph, out_edge_i, j);
+       if (get_vertex_timestamp(graph, out_edge_i_in_edge_j) > get_vertex_timestamp(graph, id) &&
+           get_vertex_timestamp(graph, out_edge_i_in_edge_j) <= (get_vertex_timestamp(graph, id) + time_delta) &&
            !in_int_array(it, it_count, out_edge_i_in_edge_j)) {
          add_to_int_array(&it, it_count, out_edge_i_in_edge_j, true);
          it_count++;
@@ -61,10 +61,10 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
      }
 
    /* add unique "in_edges" of focal vertex */
-   for (i = 0; i < graph->vs[id].in_degree; i++) {
-     long long int in_edge_i = graph->vs[id].in_edges[i];
-     if (graph->vs[in_edge_i].timestamp > graph->vs[id].timestamp &&
-         graph->vs[in_edge_i].timestamp <= (graph->vs[id].timestamp + time_delta) &&
+   for (i = 0; i < get_vertex_in_degree(graph, id); i++) {
+     long long int in_edge_i = get_vertex_in_edge(graph, id, i);
+     if (get_vertex_timestamp(graph, in_edge_i) > get_vertex_timestamp(graph, id) &&
+         get_vertex_timestamp(graph, in_edge_i) <= (get_vertex_timestamp(graph, id) + time_delta) &&
          !in_int_array(it, it_count, in_edge_i)) {
        add_to_int_array(&it, it_count, in_edge_i, true);
        it_count++;
@@ -74,10 +74,10 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
   /* compute the cd index */
   double sum_i = 0.0;
   for (i = 0; i < it_count; i++) {
-    long long int f_it = in_int_array(graph->vs[it[i]].out_edges, graph->vs[it[i]].out_degree, id);
+    long long int f_it = in_int_array(get_vertex_out_edges(graph,it[i]), get_vertex_out_degree(graph, it[i]), id);
     long long int b_it = 0;
-    for (long long int j = 0; j < graph->vs[it[i]].out_degree; j++) {
-      if (in_int_array(graph->vs[id].out_edges, graph->vs[id].out_degree, graph->vs[it[i]].out_edges[j])) {
+    for (long long int j = 0; j < get_vertex_out_degree(graph, it[i]); j++) {
+      if (in_int_array(get_vertex_out_edges(graph, id), get_vertex_out_degree(graph, id), get_vertex_out_edge(graph, it[i], j))) {
         b_it = 1;
       }
     }
@@ -102,9 +102,9 @@ long long int iindex(Graph *graph, long long int id, long long int time_delta){
 
    /* count mt vertices that are "in_edges" of the focal vertex as of timestamp t. */
    long long int mt_count = 0;
-   for (long long int i = 0; i < graph->vs[id].in_degree; i++) {
-     long long int in_edge_i = graph->vs[id].in_edges[i];
-     if (graph->vs[in_edge_i].timestamp <= (graph->vs[id].timestamp + time_delta)) {
+   for (long long int i = 0; i < get_vertex_in_degree(graph, id); i++) {
+     long long int in_edge_i = get_vertex_in_edge(graph, id, i);
+     if (get_vertex_timestamp(graph, in_edge_i) <= (get_vertex_timestamp(graph, id) + time_delta)) {
        mt_count++;
        }
      }
