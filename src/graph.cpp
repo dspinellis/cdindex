@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include "cdindex.h"
 
+extern "C" {
 /**
  * \function is_graph_sane
  * \brief Run a few basic (not comprehensive) checks on graph data structure.
@@ -66,10 +67,10 @@ void add_vertex(Graph *graph, long long int id, long long int timestamp) {
   /* allocate memory for a vertex */
   Vertex *tmp;
   if (graph->vcount == 0) {
-    tmp = malloc(sizeof(Vertex));
+    tmp = (Vertex *)malloc(sizeof(Vertex));
   }
   else {
-    tmp = realloc(graph->vs, (graph->vcount + 1) * sizeof(Vertex));
+    tmp = (Vertex *)realloc(graph->vs, (graph->vcount + 1) * sizeof(Vertex));
   }
   if (tmp==NULL) {
     raise_error(0);
@@ -127,13 +128,13 @@ void add_edge(Graph *graph, long long int source_id, long long int target_id) {
 
     /* allocate memory for source_id out_edge record if needed */
     if (graph->vs[source_id].out_degree == 0) {
-      graph->vs[source_id].out_edges = malloc(sizeof(long long int));
+      graph->vs[source_id].out_edges = (long long int *)malloc(sizeof(long long int));
       reallocate_out_edges = false;
     }
 
     /* allocate memory for target_id in_edge record if needed */
     if (graph->vs[target_id].in_degree == 0) {
-      graph->vs[target_id].in_edges = malloc(sizeof(long long int));
+      graph->vs[target_id].in_edges = (long long int *)malloc(sizeof(long long int));
       reallocate_in_edges = false;
     }
 
@@ -169,3 +170,5 @@ void free_graph(Graph *graph) {
    }
   free(graph->vs);
 }
+
+} // extern "C"

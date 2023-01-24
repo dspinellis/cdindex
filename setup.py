@@ -20,7 +20,7 @@ setup(name="cdindex",
     ext_modules=[
                   Extension("cdindex._cdindex",
                             ["src/cdindex.c", 
-                             "src/graph.c", 
+                             "src/graph.cpp", 
                              "src/utility.c", 
                              "cdindex/pycdindex.c"],
                              include_dirs = ["src"],
