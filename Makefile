@@ -8,7 +8,13 @@ $(EXECUTABLE): $(OBJECTS)
 	mkdir -p bin
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-.PHONY: clean
+.PHONY: clean test
 
 clean:
 	rm -f src/*.o $(EXECUTABLE)
+
+# Regression test
+test:
+	bin/cdindex.exe | diff tests/bin.ok -
+	python tests/tests.py | diff tests/py.ok -
+
