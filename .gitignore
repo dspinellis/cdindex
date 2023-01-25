@@ -106,3 +106,4 @@ ENV/
 # Project specific
 bin/
 src/*.o
+.gdb_history
