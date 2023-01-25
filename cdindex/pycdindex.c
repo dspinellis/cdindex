@@ -26,14 +26,13 @@
 /* Destructor function for Graph */
 static void del_Graph(PyObject *obj) {
   free_graph(PyCapsule_GetPointer(obj,"Graph"));
-  free(PyCapsule_GetPointer(obj,"Graph"));
 }
 
 /* Graph utility functions */
-static Graph *PyGraph_AsGraph(PyObject *obj) {
-  return (Graph *) PyCapsule_GetPointer(obj, "Graph");
+static Graph PyGraph_AsGraph(PyObject *obj) {
+  return (Graph ) PyCapsule_GetPointer(obj, "Graph");
 }
-static PyObject *PyGraph_FromGraph(Graph *g, int must_free) {
+static PyObject *PyGraph_FromGraph(Graph g, int must_free) {
   return PyCapsule_New(g, "Graph", must_free ? del_Graph : NULL);
 }
 
@@ -41,13 +40,7 @@ static PyObject *PyGraph_FromGraph(Graph *g, int must_free) {
  * Create a new Graph object                                                   *
  ******************************************************************************/
 static PyObject *py_Graph(PyObject *self, PyObject *args) {
-  Graph *g;
-
-  // create a graph
-  g = (Graph *) malloc(sizeof(Graph));
-  g->vcount = 0;
-  g->ecount = 0;
-
+  Graph g = create_graph();
   return PyGraph_FromGraph(g, 1);
 }
 
@@ -55,7 +48,7 @@ static PyObject *py_Graph(PyObject *self, PyObject *args) {
  * Check graph sanity                                                          *
  ******************************************************************************/
 static PyObject *py_is_graph_sane(PyObject *self, PyObject *args) {
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"O",&py_g))
@@ -72,7 +65,7 @@ static PyObject *py_is_graph_sane(PyObject *self, PyObject *args) {
 static PyObject *py_add_vertex(PyObject *self, PyObject *args) {
   vertex_id_t ID;
   timestamp_t TIMESTAMP;
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OLL",&py_g, &ID, &TIMESTAMP))
@@ -90,7 +83,7 @@ static PyObject *py_add_vertex(PyObject *self, PyObject *args) {
  ******************************************************************************/
 static PyObject *py_add_edge(PyObject *self, PyObject *args) {
   vertex_id_t SOURCE_ID, TARGET_ID;
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OLL",&py_g, &SOURCE_ID, &TARGET_ID))
@@ -108,7 +101,7 @@ static PyObject *py_add_edge(PyObject *self, PyObject *args) {
  ******************************************************************************/
 static PyObject *py_get_vcount(PyObject *self, PyObject *args) {
 
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"O",&py_g))
@@ -116,7 +109,7 @@ static PyObject *py_get_vcount(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", g->vcount);
+  return Py_BuildValue("L", get_graph_vcount(g));
 }
 
 /*******************************************************************************
@@ -124,7 +117,7 @@ static PyObject *py_get_vcount(PyObject *self, PyObject *args) {
  ******************************************************************************/
 static PyObject *py_get_vertices(PyObject *self, PyObject *args) {
 
-  Graph *g;
+  Graph g;
   PyObject *py_g, *id, *result;
 
   if (!PyArg_ParseTuple(args,"O",&py_g))
@@ -132,9 +125,9 @@ static PyObject *py_get_vertices(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  PyObject *vs_list = PyList_New(g->vcount);
+  PyObject *vs_list = PyList_New(get_graph_vcount(g));
 
-  for (size_t i = 0; i < g->vcount; i++) {
+  for (size_t i = 0; i < get_graph_vcount(g); i++) {
     id = Py_BuildValue("L", i);
     PyList_SetItem(vs_list, i, id);
   }
@@ -152,7 +145,7 @@ static PyObject *py_get_vertices(PyObject *self, PyObject *args) {
  ******************************************************************************/
 static PyObject *py_get_ecount(PyObject *self, PyObject *args) {
 
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"O",&py_g))
@@ -160,7 +153,7 @@ static PyObject *py_get_ecount(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", g->ecount);
+  return Py_BuildValue("L", get_graph_ecount(g));
 }
 
 /*******************************************************************************
@@ -169,7 +162,7 @@ static PyObject *py_get_ecount(PyObject *self, PyObject *args) {
 static PyObject *py_get_vertex_timestamp(PyObject *self, PyObject *args) {
   vertex_id_t ID;
 
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OL",&py_g, &ID))
@@ -186,7 +179,7 @@ static PyObject *py_get_vertex_timestamp(PyObject *self, PyObject *args) {
 static PyObject *py_get_vertex_in_degree(PyObject *self, PyObject *args) {
   vertex_id_t ID;
 
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OL",&py_g, &ID))
@@ -203,7 +196,7 @@ static PyObject *py_get_vertex_in_degree(PyObject *self, PyObject *args) {
 static PyObject *py_get_vertex_in_edges(PyObject *self, PyObject *args) {
 
   vertex_id_t ID;
-  Graph *g;
+  Graph g;
   PyObject *py_g, *source_id, *result;
 
   if (!PyArg_ParseTuple(args,"OL",&py_g, &ID))
@@ -232,7 +225,7 @@ static PyObject *py_get_vertex_in_edges(PyObject *self, PyObject *args) {
 static PyObject *py_get_vertex_out_degree(PyObject *self, PyObject *args) {
   vertex_id_t ID;
 
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OL",&py_g, &ID))
@@ -249,7 +242,7 @@ static PyObject *py_get_vertex_out_degree(PyObject *self, PyObject *args) {
 static PyObject *py_get_vertex_out_edges(PyObject *self, PyObject *args) {
 
   vertex_id_t ID;
-  Graph *g;
+  Graph g;
   PyObject *py_g, *target_id, *result;
 
   if (!PyArg_ParseTuple(args,"OL",&py_g, &ID))
@@ -280,7 +273,7 @@ static PyObject *py_cdindex(PyObject *self, PyObject *args) {
   timestamp_t TIMESTAMP;
 
   double result;
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OLL",&py_g, &ID, &TIMESTAMP))
@@ -300,7 +293,7 @@ static PyObject *py_mcdindex(PyObject *self, PyObject *args) {
   vertex_id_t ID;
   timestamp_t TIMESTAMP;
   double result;
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OLL",&py_g, &ID, &TIMESTAMP))
@@ -320,7 +313,7 @@ static PyObject *py_iindex(PyObject *self, PyObject *args) {
   vertex_id_t ID;
   timestamp_t TIMESTAMP;
   double result;
-  Graph *g;
+  Graph g;
   PyObject *py_g;
 
   if (!PyArg_ParseTuple(args,"OLL",&py_g, &ID, &TIMESTAMP))

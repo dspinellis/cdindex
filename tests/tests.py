@@ -103,7 +103,8 @@ def c_tests():
            "cd index", TEST_TIME, _cdindex.cdindex(graph, vertex, TEST_TIME),
            "mcd index", TEST_TIME, _cdindex.mcdindex(graph, vertex, TEST_TIME),
            "in edges", _cdindex.get_vertex_in_edges(graph, vertex),
-           "out edges", _cdindex.get_vertex_out_edges(graph, vertex)))
+           "out edges", _cdindex.get_vertex_out_edges(graph, vertex)),
+          flush=True)
 
 # tests for the python module
 def py_tests():
@@ -135,7 +136,7 @@ def py_tests():
            "cd index", TEST_TIME_PY, graph.cdindex(vertex, int(TEST_TIME_PY.total_seconds())),
            "mcd index", TEST_TIME_PY, graph.mcdindex(vertex, int(TEST_TIME_PY.total_seconds())),
            "in edges", graph.in_edges(vertex),
-           "out edges", graph.out_edges(vertex)))
+           "out edges", graph.out_edges(vertex)), flush=True)
 
 def main():
 

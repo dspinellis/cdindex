@@ -30,7 +30,7 @@
  *
  * \return The value of the CD index.
  */
-double cdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
+double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
 
    /* Build a list of "it" vertices that are "in_edges" of the focal vertex's
      "out_edges" as of timestamp t. Vertices in the list are unique. */
@@ -98,7 +98,7 @@ double cdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
  *
  * \return The value of the I index.
  */
-size_t iindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
+size_t iindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
 
    /* count mt vertices that are "in_edges" of the focal vertex as of timestamp t. */
    size_t mt_count = 0;
@@ -122,7 +122,7 @@ size_t iindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
  *
  * \return The value of the mCD index.
  */
-double mcdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
+double mcdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
 
   double cdindex_value = cdindex(graph, id, time_delta);
   size_t iindex_value = iindex(graph, id, time_delta);

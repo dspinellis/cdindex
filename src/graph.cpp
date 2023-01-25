@@ -23,7 +23,7 @@
 
 extern "C" {
 
-typedef struct Vertex {
+typedef struct vertex_s {
   vertex_id_t id;
   timestamp_t timestamp;
   vertex_id_t *in_edges;
@@ -32,44 +32,74 @@ typedef struct Vertex {
   size_t out_degree;
 } Vertex;
 
+struct graph_s {
+    size_t vcount;
+    struct vertex_s *vs;
+    size_t ecount;
+};
+
+/*
+ * Graph ADT access functions
+ * These allow treating Graph as an opaque data type
+ */
+Graph
+create_graph(void)
+{
+	Graph g = (Graph)malloc(sizeof(struct graph_s));
+	g->vcount = g->ecount = 0;
+	return g;
+}
+
+size_t
+get_graph_vcount(Graph g)
+{
+	return g->vcount;
+}
+
+size_t
+get_graph_ecount(Graph g)
+{
+	return g->ecount;
+}
+
 /*
  * Vertex access functions.
  * These allow treating Vertex as an opaque data type
  */
 size_t
-get_vertex_in_degree(Graph *g, vertex_id_t id)
+get_vertex_in_degree(Graph g, vertex_id_t id)
 {
 	return g->vs[id.id].in_degree;
 }
 
 size_t
-get_vertex_out_degree(Graph *g, vertex_id_t id)
+get_vertex_out_degree(Graph g, vertex_id_t id)
 {
 	return g->vs[id.id].out_degree;
 }
 
 timestamp_t
-get_vertex_timestamp(Graph *g, vertex_id_t id)
+get_vertex_timestamp(Graph g, vertex_id_t id)
 {
 	return g->vs[id.id].timestamp;
 }
 
 // Return the vertex's nth out edge
 vertex_id_t
-get_vertex_out_edge(Graph *g, vertex_id_t vertex_id, size_t edge_n)
+get_vertex_out_edge(Graph g, vertex_id_t vertex_id, size_t edge_n)
 {
 	return g->vs[vertex_id.id].out_edges[edge_n];
 }
 
 // Return the vertex's nth in edge
 vertex_id_t
-get_vertex_in_edge(Graph *g, vertex_id_t vertex_id, size_t edge_n)
+get_vertex_in_edge(Graph g, vertex_id_t vertex_id, size_t edge_n)
 {
 	return g->vs[vertex_id.id].in_edges[edge_n];
 }
 
 bool
-vertex_has_out_edge(Graph *g, vertex_id_t vertex_id, vertex_id_t out_vertex_id)
+vertex_has_out_edge(Graph g, vertex_id_t vertex_id, vertex_id_t out_vertex_id)
 {
     return in_int_array(g->vs[vertex_id.id].out_edges, g->vs[vertex_id.id].out_degree, out_vertex_id);
 }
@@ -90,7 +120,7 @@ make_vertex_id(unsigned long long int id)
  *
  * \return Whether the graph is sane.
  */
-bool is_graph_sane(Graph *graph) {
+bool is_graph_sane(Graph graph) {
   bool sane = true;
 
   /* vcount should not be negative */
@@ -122,7 +152,7 @@ bool is_graph_sane(Graph *graph) {
  * \param id The new vertex id.
  * \param timestamp The new vertex timestamp.
  */
-void add_vertex(Graph *graph, vertex_id_t id, timestamp_t timestamp) {
+void add_vertex(Graph graph, vertex_id_t id, timestamp_t timestamp) {
 
   /* allocate memory for a vertex */
   Vertex *tmp;
@@ -158,7 +188,7 @@ void add_vertex(Graph *graph, vertex_id_t id, timestamp_t timestamp) {
  * \param source_id The source vertex id.
  * \param target_id The target vertex id.
  */
-void add_edge(Graph *graph, vertex_id_t source_id, vertex_id_t target_id) {
+void add_edge(Graph graph, vertex_id_t source_id, vertex_id_t target_id) {
 
   /* confirm vertices are in graph */
   if (source_id.id >= graph->vcount || target_id.id >= graph->vcount) {
@@ -223,12 +253,13 @@ void add_edge(Graph *graph, vertex_id_t source_id, vertex_id_t target_id) {
  *
  * \param graph The input graph.
  */
-void free_graph(Graph *graph) {
+void free_graph(Graph graph) {
   for (size_t i = 0; i < graph->vcount; i++) {
    if (graph->vs[i].in_degree > 0) free(graph->vs[i].in_edges);
    if (graph->vs[i].out_degree > 0) free(graph->vs[i].out_edges);
    }
   free(graph->vs);
+  free(graph);
 }
 
 } // extern "C"

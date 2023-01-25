@@ -54,29 +54,29 @@ int main() {
                           {10,4}};
 
   /* create an empty graph */
-  CREATE_GRAPH(g);
+  Graph g = create_graph();
 
   /* add vertices to the graph */
   for (int i = 0; i < VERTICES; i++) {
-    add_vertex(&g, make_vertex_id(i), raw_vertices_time[i]);
+    add_vertex(g, make_vertex_id(i), raw_vertices_time[i]);
   }
 
   /* add edges to the graph */
   for (int p = 0; p < EDGES; p++) {
-    add_edge(&g, raw_edges[p][0], raw_edges[p][1]);
+    add_edge(g, raw_edges[p][0], raw_edges[p][1]);
   }
 
   /* test and report sanity */
-    printf("Testing graph sanity: %s\n", is_graph_sane(&g) ? "PASS" : "FAIL");
+    printf("Testing graph sanity: %s\n", is_graph_sane(g) ? "PASS" : "FAIL");
 
   /* compute cdindex measure */
-  printf("CD index: %f\n", cdindex(&g, make_vertex_id(4), 157680000));
+  printf("CD index: %f\n", cdindex(g, make_vertex_id(4), 157680000));
 
   /* compute mcdindex measure */
-  printf("mCD index: %f\n", mcdindex(&g, make_vertex_id(4), 157680000));
+  printf("mCD index: %f\n", mcdindex(g, make_vertex_id(4), 157680000));
 
   /* free memory use by the graph */
-  free_graph(&g);
+  free_graph(g);
 
   return 0;
 }
