@@ -40,6 +40,7 @@ vertex_id_t make_vertex_id(unsigned long long int id);
 Graph create_graph(void);
 Graph create_graph(void);
 size_t get_graph_ecount(Graph g);
+size_t get_graph_vcount(Graph g);
 
 /* function prototypes for cdindex.c */
 double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta);

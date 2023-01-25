@@ -22,7 +22,7 @@ setup(name="cdindex",
                             ["src/cdindex.c", 
                              "src/graph.cpp", 
                              "src/utility.c", 
-                             "cdindex/pycdindex.c"],
+                             "cdindex/pycdindex.cpp"],
                              include_dirs = ["src"],
                              headers = ["src/cdindex.h"],
                            )

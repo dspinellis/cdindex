@@ -16,6 +16,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+extern "C" {
+
 #include <Python.h>
 #include "cdindex.h"
 
@@ -25,7 +27,7 @@
 
 /* Destructor function for Graph */
 static void del_Graph(PyObject *obj) {
-  free_graph(PyCapsule_GetPointer(obj,"Graph"));
+  free_graph((Graph)PyCapsule_GetPointer(obj,"Graph"));
 }
 
 /* Graph utility functions */
@@ -374,3 +376,5 @@ init_cdindex(void) {
     (void) Py_InitModule("_cdindex", CDIndexMethods);
 }
 #endif
+
+} // extern "C"
