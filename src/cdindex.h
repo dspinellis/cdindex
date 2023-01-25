@@ -6,39 +6,47 @@ extern "C" {
 
 struct Vertex;
 
+typedef union {
+	unsigned long long int id;
+	struct Vertex *v;
+} vertex_id_t;
+
+typedef long long int timestamp_t;
+
 typedef struct Graph {
-    long long int vcount;
+    size_t vcount;
     struct Vertex *vs;
-    long long int ecount;
+    size_t ecount;
 } Graph;
 
 #define CREATE_GRAPH(G) Graph G = {.vcount = 0, .ecount = 0}
 
 /* function prototypes for utility.c */
 void raise_error(int code);
-bool in_int_array(long long int *array, long long int sizeof_array, long long int value);
-void add_to_int_array(long long int **array, long long int sizeof_array, long long int value, bool add_memory);
-struct Vertex *get_vertex(Graph *g, long long int id);
+bool in_int_array(vertex_id_t *array, size_t sizeof_array, vertex_id_t value);
+void add_to_int_array(vertex_id_t **array, size_t sizeof_array, vertex_id_t value, bool add_memory);
+struct Vertex *get_vertex(Graph *g, vertex_id_t id);
 
 
 /* function prototypes for graph.cpp */
 bool is_graph_sane(Graph *graph); 
-void add_vertex(Graph *graph, long long int id, long long int timestamp);
-void add_edge(Graph *graph, long long int source_id, long long int target_id);
+void add_vertex(Graph *graph, vertex_id_t id, timestamp_t timestamp);
+void add_edge(Graph *graph, vertex_id_t source_id, vertex_id_t target_id);
 void free_graph(Graph *graph);
 
-long long int get_vertex_in_degree(Graph *g, long long int id);
-long long int get_vertex_out_degree(Graph *g, long long int id);
-long long int get_vertex_timestamp(Graph *g, long long int id);
-long long int get_vertex_out_edge(Graph *g, long long int vertex_id, long long int edge_id);
-long long int get_vertex_in_edge(Graph *g, long long int vertex_id, long long int edge_id);
-bool vertex_has_out_edge(Graph *g, long long int vertex_id, long long int edge_id);
+size_t get_vertex_in_degree(Graph *g, vertex_id_t id);
+size_t get_vertex_out_degree(Graph *g, vertex_id_t id);
+timestamp_t get_vertex_timestamp(Graph *g, vertex_id_t id);
+vertex_id_t get_vertex_out_edge(Graph *g, vertex_id_t vertex_id, size_t n);
+vertex_id_t get_vertex_in_edge(Graph *g, vertex_id_t vertex_id, size_t n);
+bool vertex_has_out_edge(Graph *g, vertex_id_t vertex_id, vertex_id_t out_vertex_id);
+vertex_id_t make_vertex_id(unsigned long long int id);
 
 
 /* function prototypes for cdindex.c */
-double cdindex(Graph *graph, long long int id, long long int time_delta);
-double mcdindex(Graph *graph, long long int id, long long int time_delta);
-long long int iindex(Graph *graph, long long int id, long long int time_delta);
+double cdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta);
+double mcdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta);
+size_t iindex(Graph *graph, vertex_id_t id, timestamp_t time_delta);
 #if defined(__cplusplus)
 }
 #endif

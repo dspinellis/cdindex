@@ -28,7 +28,7 @@ int main() {
   int EDGES = 13;
 
   /* dummy data */
-  long long int raw_vertices_time[] = {694245600,
+  timestamp_t raw_vertices_time[] = {694245600,
                                        694245600,
                                        725868000,
                                        725868000,
@@ -39,7 +39,7 @@ int main() {
                                        915170400,
                                        883634400,
                                        852098400};
-  long long int raw_edges[13][2] = {{4,2},
+  vertex_id_t raw_edges[13][2] = {{4,2},
                           {4,0},
                           {4,1},
                           {4,3},
@@ -58,7 +58,7 @@ int main() {
 
   /* add vertices to the graph */
   for (int i = 0; i < VERTICES; i++) {
-    add_vertex(&g, i, raw_vertices_time[i]);
+    add_vertex(&g, make_vertex_id(i), raw_vertices_time[i]);
   }
 
   /* add edges to the graph */
@@ -70,10 +70,10 @@ int main() {
     printf("Testing graph sanity: %s\n", is_graph_sane(&g) ? "PASS" : "FAIL");
 
   /* compute cdindex measure */
-  printf("CD index: %f\n", cdindex(&g, 4, 157680000));
+  printf("CD index: %f\n", cdindex(&g, make_vertex_id(4), 157680000));
 
   /* compute mcdindex measure */
-  printf("mCD index: %f\n", mcdindex(&g, 4, 157680000));
+  printf("mCD index: %f\n", mcdindex(&g, make_vertex_id(4), 157680000));
 
   /* free memory use by the graph */
   free_graph(&g);

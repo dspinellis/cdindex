@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "cdindex.h"
 
 /**
  * \function raise_error
@@ -47,10 +48,10 @@ void raise_error(int code) {
  *
  * \return Whether value is in the array.
  */
-bool in_int_array(long long int *array, long long int sizeof_array, long long int value) {
+bool in_int_array(vertex_id_t *array, size_t sizeof_array, vertex_id_t value) {
   bool in_array = false;
-  for (long long int i = 0; i < sizeof_array; i++) {
-    if (array[i] == value) {
+  for (size_t i = 0; i < sizeof_array; i++) {
+    if (array[i].id == value.id) {
       in_array = true;
     }
   }
@@ -66,10 +67,10 @@ bool in_int_array(long long int *array, long long int sizeof_array, long long in
  * \param value The value to add to the array.
  * \param add_memory Whether to add memory to the array.
  */
-void add_to_int_array(long long int **array, long long int sizeof_array, long long int value, bool add_memory) {
-long long int *tmp;
+void add_to_int_array(vertex_id_t **array, size_t sizeof_array, vertex_id_t value, bool add_memory) {
+vertex_id_t *tmp;
   if (add_memory) {
-    tmp = realloc(*array, (sizeof_array + 1) * sizeof(long long int));
+    tmp = realloc(*array, (sizeof_array + 1) * sizeof(vertex_id_t));
     if (tmp==NULL) {
       raise_error(0);
     }

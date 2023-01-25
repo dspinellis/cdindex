@@ -24,51 +24,62 @@
 extern "C" {
 
 typedef struct Vertex {
-	long long int id;
-	long long int timestamp;
-  long long int *in_edges;
-  long long int *out_edges;
-  long long int in_degree;
-  long long int out_degree;
+  vertex_id_t id;
+  timestamp_t timestamp;
+  vertex_id_t *in_edges;
+  vertex_id_t *out_edges;
+  size_t in_degree;
+  size_t out_degree;
 } Vertex;
 
 /*
  * Vertex access functions.
  * These allow treating Vertex as an opaque data type
  */
-long long int
-get_vertex_in_degree(Graph *g, long long int id)
+size_t
+get_vertex_in_degree(Graph *g, vertex_id_t id)
 {
-	return g->vs[id].in_degree;
+	return g->vs[id.id].in_degree;
 }
 
-long long int
-get_vertex_out_degree(Graph *g, long long int id)
+size_t
+get_vertex_out_degree(Graph *g, vertex_id_t id)
 {
-	return g->vs[id].out_degree;
+	return g->vs[id.id].out_degree;
 }
 
-long long int
-get_vertex_timestamp(Graph *g, long long int id)
+timestamp_t
+get_vertex_timestamp(Graph *g, vertex_id_t id)
 {
-	return g->vs[id].timestamp;
+	return g->vs[id.id].timestamp;
 }
 
-long long int
-get_vertex_out_edge(Graph *g, long long int vertex_id, long long int edge_id)
+// Return the vertex's nth out edge
+vertex_id_t
+get_vertex_out_edge(Graph *g, vertex_id_t vertex_id, size_t edge_n)
 {
-	return g->vs[vertex_id].out_edges[edge_id];
+	return g->vs[vertex_id.id].out_edges[edge_n];
 }
 
-long long int get_vertex_in_edge(Graph *g, long long int vertex_id, long long int edge_id)
+// Return the vertex's nth in edge
+vertex_id_t
+get_vertex_in_edge(Graph *g, vertex_id_t vertex_id, size_t edge_n)
 {
-	return g->vs[vertex_id].in_edges[edge_id];
+	return g->vs[vertex_id.id].in_edges[edge_n];
 }
 
 bool
-vertex_has_out_edge(Graph *g, long long int vertex_id, long long int edge_id)
+vertex_has_out_edge(Graph *g, vertex_id_t vertex_id, vertex_id_t out_vertex_id)
 {
-    return in_int_array(g->vs[vertex_id].out_edges, g->vs[vertex_id].out_degree, edge_id);
+    return in_int_array(g->vs[vertex_id.id].out_edges, g->vs[vertex_id.id].out_degree, out_vertex_id);
+}
+
+vertex_id_t
+make_vertex_id(unsigned long long int id)
+{
+	vertex_id_t ret;
+	ret.id = id;
+	return ret;
 }
 
 /**
@@ -89,14 +100,14 @@ bool is_graph_sane(Graph *graph) {
   else {
     /* vertex ids should be sequential */
     if (graph->vcount > 1) {
-			for (long long int i = 1; i < graph->vcount; i++) {
-	      if (graph->vs[i-1].id + 1 != graph->vs[i].id) {
+			for (size_t i = 1; i < graph->vcount; i++) {
+	      if (graph->vs[i-1].id.id + 1 != graph->vs[i].id.id) {
 					sane = false;
 				}
 			}
 		}
     /* the last vertex id should correspond to the number of vertices - 1 */
-		if (graph->vs[graph->vcount - 1].id != graph->vcount - 1) {
+		if (graph->vs[graph->vcount - 1].id.id != graph->vcount - 1) {
 			sane = false;
 		}
 	}
@@ -111,7 +122,7 @@ bool is_graph_sane(Graph *graph) {
  * \param id The new vertex id.
  * \param timestamp The new vertex timestamp.
  */
-void add_vertex(Graph *graph, long long int id, long long int timestamp) {
+void add_vertex(Graph *graph, vertex_id_t id, timestamp_t timestamp) {
 
   /* allocate memory for a vertex */
   Vertex *tmp;
@@ -129,10 +140,10 @@ void add_vertex(Graph *graph, long long int id, long long int timestamp) {
   }
 
   /* the new vertex id should come at the end of the list */
-  if (id != graph->vcount) {
+  if (id.id != graph->vcount) {
     raise_error(1);
   }
-  graph->vs[graph->vcount].id = graph->vcount;
+  graph->vs[graph->vcount].id.id = graph->vcount;
 	graph->vs[graph->vcount].timestamp = timestamp;
   graph->vs[graph->vcount].in_degree = 0;
   graph->vs[graph->vcount].out_degree = 0;
@@ -147,17 +158,17 @@ void add_vertex(Graph *graph, long long int id, long long int timestamp) {
  * \param source_id The source vertex id.
  * \param target_id The target vertex id.
  */
-void add_edge(Graph *graph, long long int source_id, long long int target_id) {
+void add_edge(Graph *graph, vertex_id_t source_id, vertex_id_t target_id) {
 
   /* confirm vertices are in graph */
-  if (source_id >= graph->vcount || target_id >= graph->vcount) {
+  if (source_id.id >= graph->vcount || target_id.id >= graph->vcount) {
     raise_error(2);
   }
 
   /* confirm vertices are in graph */
   /*
-  long long int vs_ids[graph->vcount]; 
-  for (long long int i = 0; i < graph->vcount; i++) {
+  vertex_id_t vs_ids[graph->vcount]; 
+  for (vertex_id_t i = 0; i < graph->vcount; i++) {
      vs_ids[i] = graph->vs[i].id;
   }
   if (!in_int_array(vs_ids, graph->vcount, source_id) || !in_int_array(vs_ids, graph->vcount, target_id)) {
@@ -166,7 +177,7 @@ void add_edge(Graph *graph, long long int source_id, long long int target_id) {
   */
   
   /* confirm edge is not already in graph */
-  else if (in_int_array(graph->vs[source_id].out_edges, graph->vs[source_id].out_degree, target_id)) {
+  else if (in_int_array(graph->vs[source_id.id].out_edges, graph->vs[source_id.id].out_degree, target_id)) {
     raise_error(3);
   }
   else {
@@ -176,29 +187,29 @@ void add_edge(Graph *graph, long long int source_id, long long int target_id) {
     bool reallocate_in_edges = true;
 
     /* allocate memory for source_id out_edge record if needed */
-    if (graph->vs[source_id].out_degree == 0) {
-      graph->vs[source_id].out_edges = (long long int *)malloc(sizeof(long long int));
+    if (graph->vs[source_id.id].out_degree == 0) {
+      graph->vs[source_id.id].out_edges = (vertex_id_t *)malloc(sizeof(vertex_id_t));
       reallocate_out_edges = false;
     }
 
     /* allocate memory for target_id in_edge record if needed */
-    if (graph->vs[target_id].in_degree == 0) {
-      graph->vs[target_id].in_edges = (long long int *)malloc(sizeof(long long int));
+    if (graph->vs[target_id.id].in_degree == 0) {
+      graph->vs[target_id.id].in_edges = (vertex_id_t *)malloc(sizeof(vertex_id_t));
       reallocate_in_edges = false;
     }
 
     /* check for problems */
-    if (graph->vs[target_id].in_edges==NULL || graph->vs[source_id].out_edges==NULL) {
+    if (graph->vs[target_id.id].in_edges==NULL || graph->vs[source_id.id].out_edges==NULL) {
       raise_error(0);
     }
 
     /* append the new source_id and target_id */
-    add_to_int_array(&graph->vs[source_id].out_edges, graph->vs[source_id].out_degree, target_id, reallocate_out_edges);
-    add_to_int_array(&graph->vs[target_id].in_edges,  graph->vs[target_id].in_degree, source_id, reallocate_in_edges);
+    add_to_int_array(&graph->vs[source_id.id].out_edges, graph->vs[source_id.id].out_degree, target_id, reallocate_out_edges);
+    add_to_int_array(&graph->vs[target_id.id].in_edges,  graph->vs[target_id.id].in_degree, source_id, reallocate_in_edges);
 
     /* increment degree counts */
-    graph->vs[source_id].out_degree++;
-    graph->vs[target_id].in_degree++;
+    graph->vs[source_id.id].out_degree++;
+    graph->vs[target_id.id].in_degree++;
 
     /* increment graph ecount */
 	  graph->ecount++;
@@ -213,7 +224,7 @@ void add_edge(Graph *graph, long long int source_id, long long int target_id) {
  * \param graph The input graph.
  */
 void free_graph(Graph *graph) {
-  for (long long int i = 0; i < graph->vcount; i++) {
+  for (size_t i = 0; i < graph->vcount; i++) {
    if (graph->vs[i].in_degree > 0) free(graph->vs[i].in_edges);
    if (graph->vs[i].out_degree > 0) free(graph->vs[i].out_edges);
    }

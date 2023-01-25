@@ -30,13 +30,13 @@
  *
  * \return The value of the CD index.
  */
-double cdindex(Graph *graph, long long int id, long long int time_delta){
+double cdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
 
    /* Build a list of "it" vertices that are "in_edges" of the focal vertex's
      "out_edges" as of timestamp t. Vertices in the list are unique. */
 
-   long long int it_count = 0;
-   long long int *it = malloc(sizeof(long long int));
+   size_t it_count = 0;
+   vertex_id_t *it = malloc(sizeof(vertex_id_t));
 
    /* check for malloc problems */
    if (it==NULL) {
@@ -44,13 +44,13 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
    }
 
    /* define i for multiple loops */
-   long long int i;
+   size_t i;
 
    /* add unique "in_edges" of focal vertex "out_edges" */
    for (i = 0; i < get_vertex_out_degree(graph, id); i++) {
-     long long int out_edge_i = get_vertex_out_edge(graph, id, i);
-     for (long long int j = 0; j < get_vertex_in_degree(graph, out_edge_i); j++) {
-       long long int out_edge_i_in_edge_j = get_vertex_in_edge(graph, out_edge_i, j);
+     vertex_id_t out_edge_i = get_vertex_out_edge(graph, id, i);
+     for (size_t j = 0; j < get_vertex_in_degree(graph, out_edge_i); j++) {
+       vertex_id_t out_edge_i_in_edge_j = get_vertex_in_edge(graph, out_edge_i, j);
        if (get_vertex_timestamp(graph, out_edge_i_in_edge_j) > get_vertex_timestamp(graph, id) &&
            get_vertex_timestamp(graph, out_edge_i_in_edge_j) <= (get_vertex_timestamp(graph, id) + time_delta) &&
            !in_int_array(it, it_count, out_edge_i_in_edge_j)) {
@@ -62,7 +62,7 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
 
    /* add unique "in_edges" of focal vertex */
    for (i = 0; i < get_vertex_in_degree(graph, id); i++) {
-     long long int in_edge_i = get_vertex_in_edge(graph, id, i);
+     vertex_id_t in_edge_i = get_vertex_in_edge(graph, id, i);
      if (get_vertex_timestamp(graph, in_edge_i) > get_vertex_timestamp(graph, id) &&
          get_vertex_timestamp(graph, in_edge_i) <= (get_vertex_timestamp(graph, id) + time_delta) &&
          !in_int_array(it, it_count, in_edge_i)) {
@@ -74,9 +74,9 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
   /* compute the cd index */
   double sum_i = 0.0;
   for (i = 0; i < it_count; i++) {
-    long long int f_it = vertex_has_out_edge(graph,it[i], id);
-    long long int b_it = 0;
-    for (long long int j = 0; j < get_vertex_out_degree(graph, it[i]); j++) {
+    size_t f_it = vertex_has_out_edge(graph,it[i], id);
+    size_t b_it = 0;
+    for (size_t j = 0; j < get_vertex_out_degree(graph, it[i]); j++) {
       if (vertex_has_out_edge(graph, id, get_vertex_out_edge(graph, it[i], j))) {
         b_it = 1;
       }
@@ -98,12 +98,12 @@ double cdindex(Graph *graph, long long int id, long long int time_delta){
  *
  * \return The value of the I index.
  */
-long long int iindex(Graph *graph, long long int id, long long int time_delta){
+size_t iindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
 
    /* count mt vertices that are "in_edges" of the focal vertex as of timestamp t. */
-   long long int mt_count = 0;
-   for (long long int i = 0; i < get_vertex_in_degree(graph, id); i++) {
-     long long int in_edge_i = get_vertex_in_edge(graph, id, i);
+   size_t mt_count = 0;
+   for (size_t i = 0; i < get_vertex_in_degree(graph, id); i++) {
+     vertex_id_t in_edge_i = get_vertex_in_edge(graph, id, i);
      if (get_vertex_timestamp(graph, in_edge_i) <= (get_vertex_timestamp(graph, id) + time_delta)) {
        mt_count++;
        }
@@ -122,10 +122,10 @@ long long int iindex(Graph *graph, long long int id, long long int time_delta){
  *
  * \return The value of the mCD index.
  */
-double mcdindex(Graph *graph, long long int id, long long int time_delta){
+double mcdindex(Graph *graph, vertex_id_t id, timestamp_t time_delta){
 
   double cdindex_value = cdindex(graph, id, time_delta);
-  long long int iindex_value = iindex(graph, id, time_delta);
+  size_t iindex_value = iindex(graph, id, time_delta);
 
   return cdindex_value * iindex_value;
 
