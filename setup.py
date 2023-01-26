@@ -20,7 +20,6 @@ setup(name="fast_cdindex",
     ext_modules=[
                   Extension("fast_cdindex._cdindex",
                             ["src/cdindex.cpp", 
-                             "src/utility.cpp", 
                              "fast_cdindex/pycdindex.cpp"],
                              include_dirs = ["src"],
                              headers = ["src/cdindex.h"],
