@@ -1,4 +1,4 @@
-SOURCES=src/main.c src/cdindex.c src/graph.c src/utility.c
+SOURCES=src/main.c src/cdindex.cpp
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=bin/cdindex
 
@@ -23,6 +23,6 @@ clean:
 
 # Regression test
 test:
-	bin/cdindex.exe | diff tests/bin.ok -
+	bin/cdindex | diff tests/bin.ok -
 	python tests/tests.py | diff tests/py.ok -
 
