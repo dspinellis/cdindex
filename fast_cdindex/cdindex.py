@@ -20,12 +20,12 @@ except ImportError:
 # custom modules
 if "READTHEDOCS" not in os.environ:
   try: 
-    import cdindex._cdindex as _cdindex
+    import fast_cdindex._cdindex as _cdindex
   except ImportError:
     import _cdindex
 
 try:
-  import cdindex.time_utilities
+  import fast_cdindex.time_utilities
 except ImportError:
   import time_utilities
 

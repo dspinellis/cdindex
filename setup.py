@@ -3,25 +3,25 @@
 
 """setup.py: This script installs the cdindex python module."""
 
-__author__ = "Russell J. Funk"
-__copyright__ = "Copyright (C) 2019"
+__author__ = "Russell J. Funk and Diomidis Spinellis"
+__copyright__ = "Copyright (C) 2019, 2023"
 
 # built in modules
 from setuptools import setup, Extension, find_packages
 
-setup(name="cdindex",
-    version="1.0.19",
-    description="Package for computing the cdindex.",
-    author="Russell J. Funk",
-    author_email="russellfunk@gmail.com",
-    url="http://www.cdindex.info",
+setup(name="fast_cdindex",
+    version="1.1.0",
+    description="Package for quickly computing the cdindex.",
+    author=["Russell J. Funk", "Diomidis Spinellis"],
+    author_email=["russellfunk@gmail.com", "dds@aueb.gr"],
+    url="https://github.com:dspinellis/cdindex",
     license="GNU General Public License (GPL)",
     install_requires=['future'],
     ext_modules=[
-                  Extension("cdindex._cdindex",
+                  Extension("fast_cdindex._cdindex",
                             ["src/cdindex.cpp", 
                              "src/utility.cpp", 
-                             "cdindex/pycdindex.cpp"],
+                             "fast_cdindex/pycdindex.cpp"],
                              include_dirs = ["src"],
                              headers = ["src/cdindex.h"],
                            )

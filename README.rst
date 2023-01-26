@@ -1,30 +1,35 @@
-cdindex
+fast-cdindex
 =======
 
 .. image:: https://readthedocs.org/projects/cdindex/badge/?version=latest
    :target: https://readthedocs.org/projects/cdindex/?badge=latest
    :alt: Documentation Status
 
-cdindex is a Python package, written in C, for computing the CD index and other dynamic 
+fast-cdindex is a Python package, written in C,
+for computing the CD index and other dynamic 
 measures on evolving directed graphs.
+It is based on the original [cdindex](https://github.com/russellfunk/cdindex)
+package written by Russel Funk, heavilly modified to improve its efficiency.
 
 - **Website:** http://www.cdindex.info
-- **Source:** https://github.com/russellfunk/cdindex
-- **Bug reports:** <russellfunk@gmail.com>
+- **Source:** https://github.com/dspinellis/fast-cdindex
+- **Bug reports:** <dds@aueb.gr>
 
 Install
 -------
 
-Install the latest version of cdindex::
+Install the latest version of fast-cdindex from the downloaded
+repository or from PyPi (when made available)::
 
-    $ pip install cdindex
+    $ pip install .
+    $ pip install fast_cdindex
 
 Simple example
 --------------
 
 Create a graph with some dummy data and compute the CD index::
 
-    >>> import cdindex
+    >>> from fast_cdindex import cdindex
     >>> import datetime
 
     >>> # dummy vertices for python module tests
@@ -74,7 +79,7 @@ Create a graph with some dummy data and compute the CD index::
 Bugs
 ----
 
-Please report any bugs to <russellfunk@gmail.com>.
+Please report any bugs to <dds@aueb.gr>.
 
 License
 -------
@@ -82,3 +87,4 @@ License
 Released under the GNU General Public License (GPL) (see `LICENSE`)::
 
    Copyright (C) 2017 Russell J. Funk <russellfunk@gmail.com>
+   Copyright (C) 2023 Diomidis Spinellis <dds@aueb.gr>

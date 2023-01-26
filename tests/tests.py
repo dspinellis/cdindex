@@ -10,8 +10,8 @@ __copyright__ = "Copyright (C) 2019, 2023"
 import datetime
 
 # custom modules
-import cdindex.cdindex
-import cdindex._cdindex as _cdindex
+from fast_cdindex import cdindex, timestamp_from_datetime
+import fast_cdindex._cdindex as _cdindex
 
 # dummy vertices for c module tests
 ctimes = (694224000,
@@ -125,7 +125,7 @@ def py_tests():
 
   # add vertices
   for vertex in pyvertices:
-    graph.add_vertex(vertex["name"], cdindex.timestamp_from_datetime(vertex["time"]))
+    graph.add_vertex(vertex["name"], timestamp_from_datetime(vertex["time"]))
 
   # add edges
   for edge in pyedges:
