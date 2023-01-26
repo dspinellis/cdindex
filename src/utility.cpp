@@ -70,7 +70,7 @@ bool in_int_array(vertex_id_t *array, size_t sizeof_array, vertex_id_t value) {
 void add_to_int_array(vertex_id_t **array, size_t sizeof_array, vertex_id_t value, bool add_memory) {
 vertex_id_t *tmp;
   if (add_memory) {
-    tmp = realloc(*array, (sizeof_array + 1) * sizeof(vertex_id_t));
+    tmp = (vertex_id_t *)realloc(*array, (sizeof_array + 1) * sizeof(vertex_id_t));
     if (tmp==NULL) {
       raise_error(0);
     }

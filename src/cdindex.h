@@ -1,9 +1,5 @@
 #include <stdbool.h>
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 struct vertex_s;
 struct graph_s;
 
@@ -46,6 +42,3 @@ size_t get_graph_vcount(Graph g);
 double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta);
 double mcdindex(Graph graph, vertex_id_t id, timestamp_t time_delta);
 size_t iindex(Graph graph, vertex_id_t id, timestamp_t time_delta);
-#if defined(__cplusplus)
-}
-#endif

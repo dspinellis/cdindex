@@ -20,8 +20,6 @@
 #include <stdbool.h>
 #include "cdindex.h"
 
-extern "C" {
-
 /**
  * \function cdindex
  * \brief Computes the CD Index.
@@ -132,5 +130,3 @@ double mcdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
   return cdindex_value * iindex_value;
 
 }
-
-} // extern "C"

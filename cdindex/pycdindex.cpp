@@ -16,10 +16,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C" {
-
 #include <Python.h>
 #include "cdindex.h"
+
+extern "C" {
 
 #if PY_MAJOR_VERSION >= 3
 #define PY3K

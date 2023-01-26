@@ -21,8 +21,6 @@
 #include <stdbool.h>
 #include "cdindex.h"
 
-extern "C" {
-
 typedef struct vertex_s {
   vertex_id_t id;
   timestamp_t timestamp;
@@ -261,5 +259,3 @@ void free_graph(Graph graph) {
   free(graph->vs);
   free(graph);
 }
-
-} // extern "C"
