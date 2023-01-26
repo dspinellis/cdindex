@@ -131,15 +131,12 @@ class Graph:
     target_name :
       The target vertex timestamp.
     """
-    if (source_name not in self._vertex_name_crosswalk
-        or target_name not in self._vertex_name_crosswalk):
-      raise ValueError("One or more vertices are not in the graph")
-    elif (target_name in self.out_edges(source_name)):
-      raise ValueError("The edge being added is already in the graph")
-    else:
+    try:
       _cdindex.add_edge(self._graph,
                         self._vertex_name_crosswalk[source_name],
                         self._vertex_name_crosswalk[target_name])
+    except KeyError:
+      raise ValueError("One or more vertices are not in the graph")
 
   def vcount(self):
     """Return the number of vertices in the graph.
