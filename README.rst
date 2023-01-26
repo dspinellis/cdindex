@@ -8,18 +8,20 @@ fast-cdindex
 fast-cdindex is a Python package, written in C,
 for computing the CD index and other dynamic 
 measures on evolving directed graphs.
-It is based on the original [cdindex](https://github.com/russellfunk/cdindex)
-package written by Russel Funk, heavilly modified to improve its efficiency.
+It is based on the original `cdindex`_ package written by Russel Funk,
+heavilly modified to improve its efficiency.
 
 - **Website:** http://www.cdindex.info
 - **Source:** https://github.com/dspinellis/fast-cdindex
 - **Bug reports:** <dds@aueb.gr>
 
+.. _cdindex: https://github.com/russellfunk/cdindex
+
 Install
 -------
 
 Install the latest version of fast-cdindex from the downloaded
-repository or from PyPi (when made available)::
+repository or from PyPi (when released)::
 
     $ pip install .
     $ pip install fast_cdindex
