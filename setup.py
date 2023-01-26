@@ -19,7 +19,7 @@ setup(name="cdindex",
     install_requires=['future'],
     ext_modules=[
                   Extension("cdindex._cdindex",
-                            ["src/cdindex.c", 
+                            ["src/cdindex.cpp", 
                              "src/graph.cpp", 
                              "src/utility.c", 
                              "cdindex/pycdindex.cpp"],

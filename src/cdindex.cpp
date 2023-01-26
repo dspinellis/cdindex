@@ -20,6 +20,8 @@
 #include <stdbool.h>
 #include "cdindex.h"
 
+extern "C" {
+
 /**
  * \function cdindex
  * \brief Computes the CD Index.
@@ -36,7 +38,7 @@ double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
      "out_edges" as of timestamp t. Vertices in the list are unique. */
 
    size_t it_count = 0;
-   vertex_id_t *it = malloc(sizeof(vertex_id_t));
+   vertex_id_t *it = (vertex_id_t *)malloc(sizeof(vertex_id_t));
 
    /* check for malloc problems */
    if (it==NULL) {
@@ -130,3 +132,5 @@ double mcdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
   return cdindex_value * iindex_value;
 
 }
+
+} // extern "C"
