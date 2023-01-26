@@ -28,6 +28,11 @@ typedef GraphContainer *Graph;
 class VertexContainer;
 typedef VertexContainer *Vertex;
 
+/*
+ * A data type that allows accessing graph vertices either
+ * through their Python-visible integer id (id), or through
+ * the internally-used VertexContainer pointer (v).
+ */
 typedef union {
 	unsigned long long int id;
 	Vertex v;
@@ -48,7 +53,6 @@ make_vertex_id(Vertex v)
 	ret.v = v;
 	return ret;
 }
-
 
 class VertexContainer {
 
@@ -146,28 +150,6 @@ public:
 
 /* function prototypes for utility.c */
 void raise_error(int code);
-
-struct vertex_s *get_vertex(Graph g, vertex_id_t id);
-
-/* function prototypes for graph.cpp */
-bool is_graph_sane(Graph graph); 
-void add_vertex(Graph graph, vertex_id_t id, timestamp_t timestamp);
-void free_graph(Graph graph);
-
-vertex_id_t get_vertex_in_edge(Graph g, vertex_id_t vertex_id, size_t n);
-bool vertex_has_out_edge(Graph g, vertex_id_t vertex_id, vertex_id_t out_vertex_id);
-vertex_id_t make_vertex_id(unsigned long long int id);
-vertex_id_t make_vertex_id(struct vertex_s *v);
-
-/*
- * Vertex access functions.
- * These allow treating Vertex as an opaque data type
- */
-
-
-Graph create_graph(void);
-size_t get_graph_ecount(Graph g);
-size_t get_graph_vcount(Graph g);
 
 /* function prototypes for cdindex.c */
 double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta);

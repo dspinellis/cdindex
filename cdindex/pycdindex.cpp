@@ -28,12 +28,12 @@ extern "C" {
 
 /* Destructor function for Graph */
 static void del_Graph(PyObject *obj) {
-  free_graph((Graph)PyCapsule_GetPointer(obj,"Graph"));
+  delete (Graph)PyCapsule_GetPointer(obj,"Graph");
 }
 
 /* Graph utility functions */
 static Graph PyGraph_AsGraph(PyObject *obj) {
-  return (Graph ) PyCapsule_GetPointer(obj, "Graph");
+  return (Graph)PyCapsule_GetPointer(obj, "Graph");
 }
 static PyObject *PyGraph_FromGraph(Graph g, int must_free) {
   return PyCapsule_New(g, "Graph", must_free ? del_Graph : NULL);
@@ -43,7 +43,7 @@ static PyObject *PyGraph_FromGraph(Graph g, int must_free) {
  * Create a new Graph object                                                   *
  ******************************************************************************/
 static PyObject *py_Graph(PyObject *self, PyObject *args) {
-  Graph g = create_graph();
+  Graph g = new GraphContainer();
   return PyGraph_FromGraph(g, 1);
 }
 

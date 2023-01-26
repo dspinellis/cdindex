@@ -23,6 +23,7 @@
 #include "cdindex.h"
 
 #include <map>
+#include <new>
 
 int main() {
 
@@ -57,7 +58,7 @@ int main() {
                           {10,4}};
 
   /* create an empty graph */
-  Graph g = create_graph();
+  Graph g = new GraphContainer();
 
   /* add vertices to the graph */
   std::map <int, vertex_id_t> i2v;
@@ -84,7 +85,7 @@ int main() {
   printf("mCD index: %f\n", mcdindex(g, i2v[4], 157680000));
 
   /* free memory use by the graph */
-  free_graph(g);
+  delete g;
 
   return 0;
 }
