@@ -17,6 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cassert>
 #include <Python.h>
 #include "cdindex.h"
 
@@ -53,6 +54,10 @@ static PyObject *py_Graph(PyObject *self, PyObject *args) {
 static PyObject *py_is_graph_sane(PyObject *self, PyObject *args) {
   Graph g;
   PyObject *py_g;
+  vertex_id_t vid;
+
+  // Ensure that the id can hold the pointer value
+  assert(sizeof(vid.id) >= sizeof(vid.v));
 
   if (!PyArg_ParseTuple(args,"O",&py_g))
     return NULL;
