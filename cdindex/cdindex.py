@@ -3,8 +3,8 @@
 
 """cdindex.py: This script is an interface for the c extension _cdindex."""
 
-__author__ = "Russell J. Funk"
-__copyright__ = "Copyright (C) 2019"
+__author__ = "Russell J. Funk and Diomidis Spinellis"
+__copyright__ = "Copyright (C) 2019, 2023"
 
 # built in modules
 import math
@@ -106,17 +106,17 @@ class Graph:
     t : int
       The vertex timestamp.
     """
-    vertex_id = self.vcount()
     if name in self._vertex_name_crosswalk:
      raise ValueError("Vertex already added to graph")
-    else:
-      self._vertex_name_crosswalk[name] = vertex_id
-      self._vertex_id_crosswalk[vertex_id] = name
     if isinstance(t, (int)) is False:
       raise ValueError("Time (t) of vertex must be an integer or long")
 
     # add the vertex
-    _cdindex.add_vertex(self._graph, vertex_id, t)
+    vertex_id = _cdindex.add_vertex(self._graph, t)
+    self._vertex_name_crosswalk[name] = vertex_id
+    self._vertex_id_crosswalk[vertex_id] = name
+
+    
 
   def add_edge(self, source_name, target_name):
     """Add a new edge to the graph.

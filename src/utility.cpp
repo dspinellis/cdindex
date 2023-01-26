@@ -1,5 +1,5 @@
 /* 
-  cdindex library.
+  fast-cdindex library.
   Copyright (C) 2017 Russell J. Funk <russellfunk@gmail.com>
    
   This program is free software: you can redistribute it and/or modify
@@ -36,47 +36,4 @@ void raise_error(int code) {
 
   fprintf(stderr, "%s\n", error[code]);
   exit(EXIT_FAILURE);
-}
-
-/**
- * \function in_int_array
- * \brief See if an integer is in an integer array.
- *
- * \param array The input array.
- * \param sizeof_array The size of the input array.
- * \param value The value to look for in the input array.
- *
- * \return Whether value is in the array.
- */
-bool in_int_array(vertex_id_t *array, size_t sizeof_array, vertex_id_t value) {
-  bool in_array = false;
-  for (size_t i = 0; i < sizeof_array; i++) {
-    if (array[i].id == value.id) {
-      in_array = true;
-    }
-  }
-  return in_array;
-}
-
-/**
- * \function add_to_int_array
- * \brief Add an integer to an integer array.
- *
- * \param array The input array.
- * \param sizeof_array The size of the input array.
- * \param value The value to add to the array.
- * \param add_memory Whether to add memory to the array.
- */
-void add_to_int_array(vertex_id_t **array, size_t sizeof_array, vertex_id_t value, bool add_memory) {
-vertex_id_t *tmp;
-  if (add_memory) {
-    tmp = (vertex_id_t *)realloc(*array, (sizeof_array + 1) * sizeof(vertex_id_t));
-    if (tmp==NULL) {
-      raise_error(0);
-    }
-    else {
-      *array = tmp;
-    }
-  }
-  (*array)[sizeof_array] = value;
 }

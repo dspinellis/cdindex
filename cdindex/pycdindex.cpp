@@ -1,6 +1,7 @@
 /* 
-  cdindex library.
+  fast-cdindex library.
   Copyright (C) 2017 Russell J. Funk <russellfunk@gmail.com>
+  Copyright (C) 2023 Diomidis Spinellis <dds@aueb.gr>
    
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -58,26 +59,25 @@ static PyObject *py_is_graph_sane(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("O", is_graph_sane(g) ? Py_True : Py_False);
+  return Py_BuildValue("O", g->is_sane() ? Py_True : Py_False);
 }
 
 /*******************************************************************************
  * Add a vertex to the graph                                                   *
  ******************************************************************************/
 static PyObject *py_add_vertex(PyObject *self, PyObject *args) {
-  vertex_id_t ID;
   timestamp_t TIMESTAMP;
   Graph g;
   PyObject *py_g;
 
-  if (!PyArg_ParseTuple(args,"OLL",&py_g, &ID, &TIMESTAMP))
+  if (!PyArg_ParseTuple(args,"OL",&py_g, &TIMESTAMP))
     return NULL;
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  add_vertex(g, ID, TIMESTAMP);
+  vertex_id_t ID = g->add_vertex(TIMESTAMP);
 
-  return Py_BuildValue("");
+  return Py_BuildValue("L", ID.id);
 }
 
 /*******************************************************************************
@@ -93,7 +93,7 @@ static PyObject *py_add_edge(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  add_edge(g, SOURCE_ID, TARGET_ID);
+  add_edge(SOURCE_ID, TARGET_ID);
 
   return Py_BuildValue("");
 }
@@ -111,7 +111,7 @@ static PyObject *py_get_vcount(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", get_graph_vcount(g));
+  return Py_BuildValue("L", g->get_vcount());
 }
 
 /*******************************************************************************
@@ -127,11 +127,13 @@ static PyObject *py_get_vertices(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  PyObject *vs_list = PyList_New(get_graph_vcount(g));
+  PyObject *vs_list = PyList_New(g->get_vcount());
 
-  for (size_t i = 0; i < get_graph_vcount(g); i++) {
-    id = Py_BuildValue("L", i);
+  size_t i = 0;
+  for (auto v : g->get_vertices()) {
+    id = Py_BuildValue("L", make_vertex_id(v).id);
     PyList_SetItem(vs_list, i, id);
+    i++;
   }
 
   result = Py_BuildValue("O", vs_list);
@@ -155,7 +157,7 @@ static PyObject *py_get_ecount(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", get_graph_ecount(g));
+  return Py_BuildValue("L", g->get_ecount());
 }
 
 /*******************************************************************************
@@ -172,7 +174,7 @@ static PyObject *py_get_vertex_timestamp(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", get_vertex_timestamp(g, ID));
+  return Py_BuildValue("L", ID.v->get_timestamp());
 }
 
 /*******************************************************************************
@@ -189,7 +191,7 @@ static PyObject *py_get_vertex_in_degree(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", get_vertex_in_degree(g, ID));
+  return Py_BuildValue("L", ID.v->get_in_degree());
 }
 
 /*******************************************************************************
@@ -206,11 +208,13 @@ static PyObject *py_get_vertex_in_edges(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  PyObject *vs_list = PyList_New(get_vertex_in_degree(g, ID));
+  PyObject *vs_list = PyList_New(ID.v->get_in_degree());
 
-  for (size_t i = 0; i < get_vertex_in_degree(g, ID); i++) {
-    source_id = Py_BuildValue("L", get_vertex_in_edge(g, ID, i));
+  size_t i = 0;
+  for (auto v : ID.v->get_in_edges()) {
+    source_id = Py_BuildValue("L", make_vertex_id(v).id);
     PyList_SetItem(vs_list, i, source_id);
+    i++;
   }
 
   result = Py_BuildValue("O", vs_list);
@@ -235,7 +239,7 @@ static PyObject *py_get_vertex_out_degree(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  return Py_BuildValue("L", get_vertex_out_degree(g, ID));
+  return Py_BuildValue("L", ID.v->get_out_degree());
 }
 
 /*******************************************************************************
@@ -252,11 +256,13 @@ static PyObject *py_get_vertex_out_edges(PyObject *self, PyObject *args) {
   if (!(g = PyGraph_AsGraph(py_g)))
     return NULL;
 
-  PyObject *vs_list = PyList_New(get_vertex_out_degree(g, ID));
+  PyObject *vs_list = PyList_New(ID.v->get_out_degree());
 
-  for (size_t i = 0; i < get_vertex_out_degree(g, ID); i++) {
-    target_id = Py_BuildValue("L", get_vertex_out_edge(g, ID, i));
+  size_t i = 0;
+  for (auto v : ID.v->get_out_edges()) {
+    target_id = Py_BuildValue("L", make_vertex_id(v).id);
     PyList_SetItem(vs_list, i, target_id);
+    i++;
   }
 
   result = Py_BuildValue("O", vs_list);

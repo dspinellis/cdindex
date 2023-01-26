@@ -1,6 +1,7 @@
 /* 
-  cdindex library.
+  fast-cdindex library.
   Copyright (C) 2017 Russell J. Funk <russellfunk@gmail.com>
+  Copyright (C) 2023 Diomidis Spinellis <dds@aueb.gr>
    
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,8 +19,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
+
 #include "cdindex.h"
+
+#include <map>
 
 int main() {
 
@@ -39,7 +42,7 @@ int main() {
                                        915170400,
                                        883634400,
                                        852098400};
-  vertex_id_t raw_edges[13][2] = {{4,2},
+  int raw_edges[13][2] = {{4,2},
                           {4,0},
                           {4,1},
                           {4,3},
@@ -57,23 +60,28 @@ int main() {
   Graph g = create_graph();
 
   /* add vertices to the graph */
+  std::map <int, vertex_id_t> i2v;
+
   for (int i = 0; i < VERTICES; i++) {
-    add_vertex(g, make_vertex_id(i), raw_vertices_time[i]);
+    vertex_id_t id = g->add_vertex(raw_vertices_time[i]);
+    i2v[i] = id;
   }
 
   /* add edges to the graph */
   for (int p = 0; p < EDGES; p++) {
-    add_edge(g, raw_edges[p][0], raw_edges[p][1]);
+    vertex_id_t from = i2v[raw_edges[p][0]];
+    vertex_id_t to = i2v[raw_edges[p][1]];
+    add_edge(from, to);
   }
 
   /* test and report sanity */
-    printf("Testing graph sanity: %s\n", is_graph_sane(g) ? "PASS" : "FAIL");
+    printf("Testing graph sanity: %s\n", g->is_sane() ? "PASS" : "FAIL");
 
   /* compute cdindex measure */
-  printf("CD index: %f\n", cdindex(g, make_vertex_id(4), 157680000));
+  printf("CD index: %f\n", cdindex(g, i2v[4], 157680000));
 
   /* compute mcdindex measure */
-  printf("mCD index: %f\n", mcdindex(g, make_vertex_id(4), 157680000));
+  printf("mCD index: %f\n", mcdindex(g, i2v[4], 157680000));
 
   /* free memory use by the graph */
   free_graph(g);
