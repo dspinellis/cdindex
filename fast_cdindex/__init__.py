@@ -1,9 +1,9 @@
 try:
-  from cdindex.cdindex import *
+  from fast_cdindex.cdindex import *
 except ImportError:
-  from cdindex import *
+  from fast_cdindex import *
 
 try:
-  from cdindex.time_utilities import *
+  from fast_cdindex.time_utilities import *
 except ImportError:
   from time_utilities import *
