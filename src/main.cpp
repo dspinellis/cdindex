@@ -75,6 +75,8 @@ int main() {
     add_edge(from, to);
   }
 
+  g.prepare_for_searching();
+
   /* test and report sanity */
     printf("Testing graph sanity: %s\n", g.is_sane() ? "PASS" : "FAIL");
 

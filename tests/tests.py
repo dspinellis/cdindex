@@ -92,6 +92,8 @@ def c_tests():
   for source, target in cedges:
     _cdindex.add_edge(i2v[source], i2v[target])
 
+  _cdindex.prepare_for_searching(graph)
+
   # examine the graph
   print("Vertices in graph: %s" % (_cdindex.get_vcount(graph)))
   print("Edges in graph: %s" % (_cdindex.get_ecount(graph)))
@@ -130,6 +132,8 @@ def py_tests():
   # add edges
   for edge in pyedges:
     graph.add_edge(edge["source"], edge["target"])
+
+  graph.prepare_for_searching()
 
   # examine the graph
   print("Vertices in graph: %s" % (graph.vcount()))

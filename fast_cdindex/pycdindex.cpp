@@ -68,6 +68,23 @@ static PyObject *py_is_graph_sane(PyObject *self, PyObject *args) {
 }
 
 /*******************************************************************************
+ * Prepare graph for searching
+ ******************************************************************************/
+static PyObject *py_prepare_for_searching(PyObject *self, PyObject *args) {
+  Graph *g;
+  PyObject *py_g;
+
+  if (!PyArg_ParseTuple(args,"O",&py_g))
+    return NULL;
+  if (!(g = PyGraph_AsGraph(py_g)))
+    return NULL;
+
+  g->prepare_for_searching();
+
+  return Py_BuildValue("");
+}
+
+/*******************************************************************************
  * Add a vertex to the graph                                                   *
  ******************************************************************************/
 static PyObject *py_add_vertex(PyObject *self, PyObject *args) {
@@ -322,6 +339,7 @@ static PyMethodDef CDIndexMethods[] = {
   {"cdindex", py_cdindex, METH_VARARGS, "Compute the CD index"},
   {"mcdindex", py_mcdindex, METH_VARARGS, "Compute the mCD index"},
   {"iindex", py_iindex, METH_VARARGS, "Compute the I index"},
+  {"prepare_for_searching", py_prepare_for_searching, METH_VARARGS, "Prepare graph for searching"},
   { NULL, NULL, 0, NULL}
 };
 

@@ -10,7 +10,7 @@ __copyright__ = "Copyright (C) 2019, 2023"
 from setuptools import setup, Extension, find_packages
 
 setup(name="fast_cdindex",
-    version="1.1.0",
+    version="1.2.0",
     description="Package for quickly computing the cdindex.",
     author=["Russell J. Funk", "Diomidis Spinellis"],
     author_email=["russellfunk@gmail.com", "dds@aueb.gr"],

@@ -382,6 +382,14 @@ class Graph:
     """
     return _cdindex._is_graph_sane(self._graph)
 
+  def prepare_for_searching(self):
+    """Arrange out edges so that they can be (efficiently) searched.
+
+    Sort the node ids stored in in each vertex's out edges to that
+    the binary search functionality of has_out_edge can work.
+    """
+    _cdindex.prepare_for_searching(self._graph)
+
 class RandomGraph(Graph):
   """Create a random graph.
 

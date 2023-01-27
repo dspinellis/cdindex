@@ -74,6 +74,9 @@ Create a graph with some dummy data and compute the CD index::
     >>> for edge in pyedges:
           graph.add_edge(edge["source"], edge["target"])
 
+    >>> # prepare for running algorithms on the graph
+    >>> graph.prepare_for_searching()
+
     >>> graph.cdindex("4Z", int(datetime.timedelta(days=1825).total_seconds()))
 
     >>> graph.mcdindex("4Z", int(datetime.timedelta(days=1825).total_seconds()))

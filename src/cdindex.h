@@ -17,10 +17,11 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <algorithm>
 #include <cstddef>
-#include <set>
 #include <new>
 #include <vector>
+
 
 typedef long long int timestamp_t;
 class Vertex;
@@ -55,22 +56,33 @@ class Vertex {
 
 private:
   timestamp_t timestamp;
-  std::set<Vertex *> in_edges;
-  std::set<Vertex *> out_edges;
+  std::vector<Vertex *> in_edges;
+  std::vector<Vertex *> out_edges;
 
 public:
   Vertex(timestamp_t t) : timestamp(t) {}
 
-  const std::set<Vertex *> &get_out_edges() { return out_edges; }
-  const std::set<Vertex *> &get_in_edges() { return in_edges; }
+  const std::vector<Vertex *> &get_out_edges() const { return out_edges; }
+  const std::vector<Vertex *> &get_in_edges() const { return in_edges; }
 
-  size_t get_in_degree() { return in_edges.size(); }
-  size_t get_out_degree() { return out_edges.size(); }
+  size_t get_in_degree() const { return in_edges.size(); }
+  size_t get_out_degree() const { return out_edges.size(); }
 
-  timestamp_t get_timestamp() { return timestamp; }
+  timestamp_t get_timestamp() const { return timestamp; }
 
-  bool has_out_edge(Vertex  *out) {
-      return out_edges.find(out) != out_edges.end();
+  // Reduce used memory from capacity to what is actuall required
+  void shrink_to_fit() {
+    out_edges.shrink_to_fit();
+    in_edges.shrink_to_fit();
+  }
+
+  // Sort out_edges to allow binary search on them
+  void sort_out_edges() {
+      std::sort(out_edges.begin(), out_edges.end());
+  }
+
+  bool has_out_edge(Vertex *out) const {
+      return std::binary_search(out_edges.begin(), out_edges.end(),  out);
   }
 
   friend void add_edge(vertex_id_t source_id, vertex_id_t target_id);
@@ -84,11 +96,13 @@ public:
  * \param graph The input graph.
  * \param source_id The source vertex id.
  * \param target_id The target vertex id.
+ *
+ * Adges must be added only once.
  */
 inline void add_edge(vertex_id_t source_id, vertex_id_t target_id) {
 
-  source_id.v->out_edges.insert(target_id.v);
-  target_id.v->in_edges.insert(source_id.v);
+  source_id.v->out_edges.push_back(target_id.v);
+  target_id.v->in_edges.push_back(source_id.v);
 }
 
 class Graph {
@@ -107,7 +121,7 @@ public:
 	  return vs.size();
   }
 
-  size_t get_ecount() {
+  size_t get_ecount() const {
     size_t count = 0;
     for (auto i : vs)
       count += i->get_in_degree();
@@ -120,14 +134,33 @@ public:
    *
    * \return Whether the graph is sane.
    */
-  bool is_sane() {
+  bool is_sane() const {
+
     size_t in_edges = 0;
     size_t out_edges = 0;
     for (auto i : vs) {
       in_edges += i->get_in_degree();
       out_edges += i->get_out_degree();
     }
-    return in_edges == out_edges;
+
+    size_t found = 0;
+    for (auto i : vs)
+      for (auto j : i->get_out_edges())
+	found += i->has_out_edge(j);
+
+    return in_edges == out_edges && found == out_edges;
+  }
+
+  /**
+   * \function prepare_for_searching
+   * \brief Sort the out edges so that has_out_edge can use binary search
+   */
+  void prepare_for_searching() {
+    for (auto i : vs) {
+      // Improve locality of reference
+      i->shrink_to_fit();
+      i->sort_out_edges();
+    }
   }
 
   /**
@@ -144,9 +177,6 @@ public:
     return make_vertex_id(v);
   }
 };
-
-/* function prototypes for utility.c */
-void raise_error(int code);
 
 /* function prototypes for cdindex.c */
 double cdindex(vertex_id_t id, timestamp_t time_delta);
