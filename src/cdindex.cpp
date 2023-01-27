@@ -54,11 +54,13 @@ double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
   /* compute the cd index */
   double sum_i = 0.0;
   for (auto i : it) {
-    size_t f_it = i->has_out_edge(id.v);
-    size_t b_it = 0;
+    int f_it = i->has_out_edge(id.v);
+    int b_it = 0;
     for (auto j : i->get_out_edges())
-      if (id.v->has_out_edge(j))
+      if (id.v->has_out_edge(j)) {
         b_it = 1;
+	break;
+      }
     sum_i += -2.0*f_it*b_it + f_it;
   }
 
