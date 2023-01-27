@@ -132,8 +132,7 @@ class Graph:
       The target vertex timestamp.
     """
     try:
-      _cdindex.add_edge(self._graph,
-                        self._vertex_name_crosswalk[source_name],
+      _cdindex.add_edge(self._vertex_name_crosswalk[source_name],
                         self._vertex_name_crosswalk[target_name])
     except KeyError:
       raise ValueError("One or more vertices are not in the graph")
@@ -214,8 +213,7 @@ class Graph:
     int
       The in degree centrality.
     """
-    return _cdindex.get_vertex_in_degree(self._graph,
-                                         self._vertex_name_crosswalk[name])
+    return _cdindex.get_vertex_in_degree(self._vertex_name_crosswalk[name])
 
   def in_edges(self, name):
     """Return the in edges of the focal vertex.
@@ -235,8 +233,7 @@ class Graph:
     list
       The in edges.
     """
-    in_edges_ids = _cdindex.get_vertex_in_edges(self._graph,
-                                                self._vertex_name_crosswalk[name])
+    in_edges_ids = _cdindex.get_vertex_in_edges(self._vertex_name_crosswalk[name])
     return [self._vertex_id_crosswalk[vertex_id] for vertex_id in in_edges_ids]
 
   def out_degree(self, name):
@@ -257,8 +254,7 @@ class Graph:
     int
       The out degree centrality.
     """
-    return _cdindex.get_vertex_out_degree(self._graph,
-                                          self._vertex_name_crosswalk[name])
+    return _cdindex.get_vertex_out_degree(self._vertex_name_crosswalk[name])
 
   def out_edges(self, name):
     """Return the out edges of the focal vertex.
@@ -278,8 +274,7 @@ class Graph:
     list
       The out edges.
     """
-    out_edges_ids = _cdindex.get_vertex_out_edges(self._graph,
-                                                  self._vertex_name_crosswalk[name])
+    out_edges_ids = _cdindex.get_vertex_out_edges(self._vertex_name_crosswalk[name])
     return [self._vertex_id_crosswalk[vertex_id] for vertex_id in out_edges_ids]
 
   def timestamp(self, name):
@@ -297,8 +292,7 @@ class Graph:
     int
       The timestamp.
     """
-    return _cdindex.get_vertex_timestamp(self._graph,
-                                         self._vertex_name_crosswalk[name])
+    return _cdindex.get_vertex_timestamp(self._vertex_name_crosswalk[name])
 
   def cdindex(self, name, t_delta):
     """Compute the CD index.
@@ -320,9 +314,7 @@ class Graph:
     """
     if isinstance(t_delta, (int)) is False:
       raise ValueError("Time delta (t_delta) must be an integer or long")
-    result = _cdindex.cdindex(self._graph,
-                              self._vertex_name_crosswalk[name],
-                              t_delta)
+    result = _cdindex.cdindex(self._vertex_name_crosswalk[name], t_delta)
     if math.isnan(result):
       return None
     else:
@@ -349,9 +341,7 @@ class Graph:
     if isinstance(t_delta, (int)) is False:
       raise ValueError("Time delta (t_delta) must be an integer or long")
     
-    result = _cdindex.mcdindex(self._graph,
-                               self._vertex_name_crosswalk[name],
-                               t_delta)
+    result = _cdindex.mcdindex(self._vertex_name_crosswalk[name], t_delta)
     if math.isnan(result):
       return None
     else:
@@ -377,9 +367,7 @@ class Graph:
     """
     if isinstance(t_delta, (int)) is False:
       raise ValueError("Time delta (t_delta) must be an integer or long")
-    return _cdindex.iindex(self._graph,
-                             self._vertex_name_crosswalk[name],
-                             t_delta)
+    return _cdindex.iindex(self._vertex_name_crosswalk[name], t_delta)
 
   def _is_graph_sane(self):
     """Test graph sanity.

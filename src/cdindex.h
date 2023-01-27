@@ -20,23 +20,19 @@
 #include <cstddef>
 #include <set>
 #include <new>
+#include <vector>
 
 typedef long long int timestamp_t;
-
-class GraphContainer;
-typedef GraphContainer *Graph;
-
-class VertexContainer;
-typedef VertexContainer *Vertex;
+class Vertex;
 
 /*
  * A data type that allows accessing graph vertices either
  * through their Python-visible integer id (id), or through
- * the internally-used VertexContainer pointer (v).
+ * the internally-used Vertex pointer (v).
  */
 typedef union {
 	unsigned long long int id;
-	Vertex v;
+	Vertex *v;
 } vertex_id_t;
 
 inline vertex_id_t
@@ -48,32 +44,32 @@ make_vertex_id(unsigned long long int id)
 }
 
 inline vertex_id_t
-make_vertex_id(Vertex v)
+make_vertex_id(Vertex *v)
 {
 	vertex_id_t ret;
 	ret.v = v;
 	return ret;
 }
 
-class VertexContainer {
+class Vertex {
 
 private:
   timestamp_t timestamp;
-  std::set<Vertex> in_edges;
-  std::set<Vertex> out_edges;
+  std::set<Vertex *> in_edges;
+  std::set<Vertex *> out_edges;
 
 public:
-  VertexContainer(timestamp_t t) : timestamp(t) {}
+  Vertex(timestamp_t t) : timestamp(t) {}
 
-  const std::set<Vertex> &get_out_edges() { return out_edges; }
-  const std::set<Vertex> &get_in_edges() { return in_edges; }
+  const std::set<Vertex *> &get_out_edges() { return out_edges; }
+  const std::set<Vertex *> &get_in_edges() { return in_edges; }
 
   size_t get_in_degree() { return in_edges.size(); }
   size_t get_out_degree() { return out_edges.size(); }
 
   timestamp_t get_timestamp() { return timestamp; }
 
-  bool has_out_edge(Vertex out) {
+  bool has_out_edge(Vertex  *out) {
       return out_edges.find(out) != out_edges.end();
   }
 
@@ -95,17 +91,17 @@ inline void add_edge(vertex_id_t source_id, vertex_id_t target_id) {
   target_id.v->in_edges.insert(source_id.v);
 }
 
-class GraphContainer {
+class Graph {
 private:
-  std::set<Vertex> vs;
+  std::vector<Vertex *> vs;
 
 public:
-  ~GraphContainer() {
+  ~Graph() {
     for (auto i : vs)
       delete i;
   }
 
-  const std::set<Vertex> &get_vertices() { return vs; }
+  const std::vector<Vertex *> &get_vertices() { return vs; }
 
   size_t get_vcount() {
 	  return vs.size();
@@ -143,8 +139,8 @@ public:
    * \param timestamp The new vertex timestamp.
    */
   vertex_id_t add_vertex(timestamp_t timestamp) {
-    Vertex v = new VertexContainer(timestamp);
-    vs.insert(v);
+    Vertex *v = new Vertex(timestamp);
+    vs.push_back(v);
     return make_vertex_id(v);
   }
 };
@@ -153,6 +149,6 @@ public:
 void raise_error(int code);
 
 /* function prototypes for cdindex.c */
-double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta);
-double mcdindex(Graph graph, vertex_id_t id, timestamp_t time_delta);
-size_t iindex(Graph graph, vertex_id_t id, timestamp_t time_delta);
+double cdindex(vertex_id_t id, timestamp_t time_delta);
+double mcdindex(vertex_id_t id, timestamp_t time_delta);
+size_t iindex(vertex_id_t id, timestamp_t time_delta);

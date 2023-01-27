@@ -90,7 +90,7 @@ def c_tests():
 
   # add edges
   for source, target in cedges:
-    _cdindex.add_edge(graph, i2v[source], i2v[target])
+    _cdindex.add_edge(i2v[source], i2v[target])
 
   # examine the graph
   print("Vertices in graph: %s" % (_cdindex.get_vcount(graph)))
@@ -107,13 +107,13 @@ def c_tests():
   for vertex in vertices:
     print("%s: %-5s | %s: %-15s %s: %-10s %s: %-10s %s at %s: %-20s %s at %s: %-20s %s: %-20s %s: %-20s"
         % ("vertex", v2i[vertex],
-           "timestamp", _cdindex.get_vertex_timestamp(graph, vertex),
-           "in degree", _cdindex.get_vertex_in_degree(graph, vertex),
-           "out degree", _cdindex.get_vertex_out_degree(graph, vertex),
-           "cd index", TEST_TIME, _cdindex.cdindex(graph, vertex, TEST_TIME),
-           "mcd index", TEST_TIME, _cdindex.mcdindex(graph, vertex, TEST_TIME),
-           "in edges", canonicalize(_cdindex.get_vertex_in_edges(graph, vertex)),
-           "out edges", canonicalize(_cdindex.get_vertex_out_edges(graph, vertex))),
+           "timestamp", _cdindex.get_vertex_timestamp(vertex),
+           "in degree", _cdindex.get_vertex_in_degree(vertex),
+           "out degree", _cdindex.get_vertex_out_degree(vertex),
+           "cd index", TEST_TIME, _cdindex.cdindex(vertex, TEST_TIME),
+           "mcd index", TEST_TIME, _cdindex.mcdindex(vertex, TEST_TIME),
+           "in edges", canonicalize(_cdindex.get_vertex_in_edges(vertex)),
+           "out edges", canonicalize(_cdindex.get_vertex_out_edges(vertex))),
           flush=True)
 
 # tests for the python module

@@ -58,13 +58,13 @@ int main() {
                           {10,4}};
 
   /* create an empty graph */
-  Graph g = new GraphContainer();
+  Graph g;
 
   /* add vertices to the graph */
   std::map <int, vertex_id_t> i2v;
 
   for (int i = 0; i < VERTICES; i++) {
-    vertex_id_t id = g->add_vertex(raw_vertices_time[i]);
+    vertex_id_t id = g.add_vertex(raw_vertices_time[i]);
     i2v[i] = id;
   }
 
@@ -76,16 +76,13 @@ int main() {
   }
 
   /* test and report sanity */
-    printf("Testing graph sanity: %s\n", g->is_sane() ? "PASS" : "FAIL");
+    printf("Testing graph sanity: %s\n", g.is_sane() ? "PASS" : "FAIL");
 
   /* compute cdindex measure */
-  printf("CD index: %f\n", cdindex(g, i2v[4], 157680000));
+  printf("CD index: %f\n", cdindex(i2v[4], 157680000));
 
   /* compute mcdindex measure */
-  printf("mCD index: %f\n", mcdindex(g, i2v[4], 157680000));
-
-  /* free memory use by the graph */
-  delete g;
+  printf("mCD index: %f\n", mcdindex(i2v[4], 157680000));
 
   return 0;
 }

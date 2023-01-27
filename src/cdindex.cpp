@@ -23,18 +23,17 @@
  * \function cdindex
  * \brief Computes the CD Index.
  *
- * \param graph The input graph.
  * \param id The focal vertex id.
  * \param time_delta Time beyond stamp of focal vertex to consider in measure.
  *
  * \return The value of the CD index.
  */
-double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
+double cdindex(vertex_id_t id, timestamp_t time_delta){
 
    /* Build a set of "it" vertices that are "in_edges" of the focal vertex's
      "out_edges" as of timestamp t. */
 
-   std::set<Vertex> it;
+   std::set<Vertex *> it;
 
    /* add unique "in_edges" of focal vertex "out_edges" */
    for (auto out_edge_i : id.v->get_out_edges())
@@ -69,13 +68,12 @@ double cdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
  * \function iindex
  * \brief Computes the I Index (i.e., the in degree of the focal vertex at time t).
  *
- * \param graph The input graph.
  * \param id The focal vertex id.
  * \param time_delta Time beyond stamp of focal vertex to consider in computing the measure.
  *
  * \return The value of the I index.
  */
-size_t iindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
+size_t iindex(vertex_id_t id, timestamp_t time_delta){
 
    /* count mt vertices that are "in_edges" of the focal vertex as of timestamp t. */
    size_t mt_count = 0;
@@ -90,16 +88,15 @@ size_t iindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
  * \function mcdindex
  * \brief Computes the mCD Index.
  *
- * \param graph The input graph.
  * \param id The focal vertex id.
  * \param time_delta Time beyond stamp of focal vertex to consider in computing the measure.
  *
  * \return The value of the mCD index.
  */
-double mcdindex(Graph graph, vertex_id_t id, timestamp_t time_delta){
+double mcdindex(vertex_id_t id, timestamp_t time_delta){
 
-  double cdindex_value = cdindex(graph, id, time_delta);
-  size_t iindex_value = iindex(graph, id, time_delta);
+  double cdindex_value = cdindex(id, time_delta);
+  size_t iindex_value = iindex(id, time_delta);
 
   return cdindex_value * iindex_value;
 
