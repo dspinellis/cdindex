@@ -17,13 +17,13 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "cdindex.h"
+#include <cstdio>
 
 #include <map>
 #include <new>
+
+#include "cdindex.h"
+
 
 int main() {
 
