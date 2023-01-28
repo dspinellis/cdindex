@@ -11,18 +11,16 @@ measures on evolving directed graphs.
 It is based on the original `cdindex`_ package written by Russel Funk,
 heavilly modified to improve its efficiency.
 On a small benchmark the original version requires:
+
 - 12.9 s to create 5000000 random vertices
 - 353 s to create 59999923 random edges
 - 36.7 s to perform the CD index calculation.
 
 This version requires:
+
 - 12.4 s to create 5000000 random vertices
 - 167 s to create 59999923 random edges
 - 36.2 s to perform the CD index calculation.
-
-- **Website:** http://www.cdindex.info
-- **Source:** https://github.com/dspinellis/fast-cdindex
-- **Bug reports:** <dds@aueb.gr>
 
 .. _cdindex: https://github.com/russellfunk/cdindex
 
@@ -90,10 +88,12 @@ Create a graph with some dummy data and compute the CD index::
 
     >>> graph.mcdindex("4Z", int(datetime.timedelta(days=1825).total_seconds()))
 
-Bugs
-----
+Further information
+-------
 
-Please report any bugs to <dds@aueb.gr>.
+- **Website:** http://www.cdindex.info
+- **Source:** https://github.com/dspinellis/fast-cdindex
+- **Bug reports:** Open an issue in this repository
 
 License
 -------
