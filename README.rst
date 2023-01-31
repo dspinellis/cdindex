@@ -10,26 +10,29 @@ for computing the CD index and other dynamic
 measures on evolving directed graphs.
 It is based on the original `cdindex`_ package written by Russel Funk,
 heavilly modified to improve its efficiency.
-When run on a graph with 116,568,934 vertices (publications) and
+When a `Python program`_ is run on a graph with 116,568,934 vertices (publications) and
 1,255,033,889 edges (citations) the original version
 
 - inserts 109,045 vertices/s
 - inserts 74,452 edges/s
-- calculates 84 CD index values/s (calculated on the first 3,000,000 vertices)
-- requiring an estimated 16 days to compute all CD index values using 47.9 GB of RAM.
+- calculates 84 CD index values/s (based on the time for the first 3,000,000 vertices)
+- requiring an estimated **16 days** to compute all CD index values using 47.9 GB of RAM.
 
 This version
 
 - inserts 90,998 vertices/s
 - inserts 240,982 edges/s
-- calculates 672 CD index values/s
-- requiring just 50 hours (estimated) to compute all CD index values using 58 GB of RAM.
+- calculates 672 CD index values/s (based on the time for the first 3,000,000 vertices)
+- requiring just **50 hours** (estimated) to compute all CD index values using 58 GB of RAM.
 
-Furthermore, a driver program using this library,
+Furthermore, a `driver program`_ using this library,
 but written entirely in C++ can utilize the processor's
-8 cores to actually finish the task in 9.5 hours using 49.8 GB of RAM.
+8 cores to process the graph's 49.8 GB data structure *shared* among them,
+and thus *actually* finish the task in a mere **9.5 hours**.
 
 .. _cdindex: https://github.com/russellfunk/cdindex
+.. _Python program: https://github.com/dspinellis/alexandria3k/blob/main/examples/cdindex/cdindex-db.py
+.. _driver program: https://github.com/dspinellis/alexandria3k/blob/main/examples/cdindex/cdindex-db.cpp
 
 Install
 -------
