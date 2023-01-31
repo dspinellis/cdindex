@@ -10,17 +10,24 @@ for computing the CD index and other dynamic
 measures on evolving directed graphs.
 It is based on the original `cdindex`_ package written by Russel Funk,
 heavilly modified to improve its efficiency.
-On a small benchmark the original version requires:
+When run on a graph with 116,568,934 vertices (publications) and
+1,255,033,889 edges (citations) the original version
 
-- 12.9 s to create 5000000 random vertices
-- 353 s to create 59999923 random edges
-- 36.7 s to perform the CD index calculation.
+- inserts 109,045 vertices/s
+- inserts 74,452 edges/s
+- calculates 84 CD index values/s (calculated on the first 3,000,000 vertices)
+- requiring an estimated 16 days to compute all CD index values using 47.9 GB of RAM.
 
-This version requires:
+This version
 
-- 12.4 s to create 5000000 random vertices
-- 167 s to create 59999923 random edges
-- 36.2 s to perform the CD index calculation.
+- inserts 90,998 vertices/s
+- inserts 240,982 edges/s
+- calculates 672 CD index values/s
+- requiring just 50 hours (estimated) to compute all CD index values using 58 GB of RAM.
+
+Furthermore, a driver program using this library,
+but written entirely in C++ can utilize the processor's
+8 cores to actually finish the task in 9.5 hours using 49.8 GB of RAM.
 
 .. _cdindex: https://github.com/russellfunk/cdindex
 
