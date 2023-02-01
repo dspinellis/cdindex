@@ -30,9 +30,20 @@ but written entirely in C++ can utilize the processor's
 8 cores to process the graph's 49.8 GB data structure *shared* among them,
 and thus *actually* finish the task in a mere **9.5 hours**.
 
+The library has been used to derive the `CD₅ index of works published in the period 1945-2016`_
+from open data through `Alexandria3k`_.
+More information about the process can be found in the following paper.
+
+Diomidis Spinellis. Open Reproducible Systematic Publication Research. arXiv:2301.13312, January 2023. https://doi.org/10.48550/arXiv.2301.13312
+
+
 .. _cdindex: https://github.com/russellfunk/cdindex
 .. _Python program: https://github.com/dspinellis/alexandria3k/blob/main/examples/cdindex/cdindex-db.py
 .. _driver program: https://github.com/dspinellis/alexandria3k/blob/main/examples/cdindex/cdindex-db.cpp
+.. _Alexandria3k: https://github.com/dspinellis/alexandria3k
+.. _CD₅ index of works published in the period 1945-2016: https://doi.org/10.5281/zenodo.7584373
+
+
 
 Install
 -------
