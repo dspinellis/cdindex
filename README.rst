@@ -9,7 +9,7 @@ fast-cdindex is a Python package, written in C,
 for computing the CD index and other dynamic 
 measures on evolving directed graphs.
 It is based on the original `cdindex`_ package written by Russel Funk,
-heavilly modified to improve its efficiency.
+heavily modified to improve its efficiency.
 When a `Python program`_ is run on a graph with 116,568,934 vertices (publications) and
 1,255,033,889 edges (citations) the original version
 
